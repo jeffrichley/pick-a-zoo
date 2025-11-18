@@ -128,4 +128,3 @@ As a user, I want clear feedback when no feeds are available or when there are i
 - Configuration file corruption is rare but must be handled gracefully when it occurs
 - Feed entries may have varying name lengths, and the display must accommodate reasonable name lengths
 - The feeds list is read-only in this feature; no modifications to feeds are made when viewing
-

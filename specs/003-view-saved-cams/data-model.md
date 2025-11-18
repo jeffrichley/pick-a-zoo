@@ -176,11 +176,11 @@ feeds:
 def prepare_feed_for_display(feed: Feed, all_feeds: list[Feed], terminal_width: int) -> DisplayFeed:
     # Resolve duplicate name
     display_name = resolve_duplicate_name(feed, all_feeds)
-    
+
     # Truncate if needed
     max_name_width = terminal_width - 4  # Account for emoji and padding
     display_name = truncate_name(display_name, max_name_width)
-    
+
     return DisplayFeed(
         feed=feed,
         display_name=display_name,
@@ -194,10 +194,9 @@ def prepare_feed_for_display(feed: Feed, all_feeds: list[Feed], terminal_width: 
 def prepare_feeds_list(feeds: list[Feed]) -> list[Feed]:
     # Filter invalid entries
     valid_feeds = [f for f in feeds if f.url and is_valid_url(f.url)]
-    
+
     # Sort alphabetically
     sorted_feeds = sorted(valid_feeds, key=lambda f: f.name.lower())
-    
+
     return sorted_feeds
 ```
-

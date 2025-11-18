@@ -143,15 +143,15 @@ def on_mount(self):
 def resolve_display_name(feed: Feed, all_feeds: list[Feed]) -> str:
     base_name = feed.name
     existing_names = {f.name for f in all_feeds if f != feed}
-    
+
     if base_name not in existing_names:
         return base_name
-    
+
     # Find highest suffix
     suffix = 2
     while f"{base_name} ({suffix})" in existing_names:
         suffix += 1
-    
+
     return f"{base_name} ({suffix})"
 ```
 
@@ -173,4 +173,3 @@ def truncate_name(name: str, max_width: int) -> str:
 ## Unresolved Questions
 
 None - all technical decisions resolved based on spec requirements, clarifications, and existing codebase patterns.
-

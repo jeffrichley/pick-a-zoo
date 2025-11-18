@@ -310,4 +310,3 @@ class ViewSavedCamsScreen(Screen):
                     logger.debug("Feed selection - watch action not yet implemented (Story 4)")
             except (ValueError, IndexError) as e:
                 logger.warning(f"Invalid feed index: {selected_item.id}: {e}")
-

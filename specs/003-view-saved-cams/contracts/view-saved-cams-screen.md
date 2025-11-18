@@ -234,4 +234,3 @@ Integration tests must cover:
 - Feed loading from actual YAML file
 - ListView scrolling behavior
 - Terminal resize handling
-

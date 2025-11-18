@@ -166,9 +166,7 @@ def test_view_saved_cams_screen_feed_selection_enter_key():
 def test_view_saved_cams_screen_list_scrolling(mock_load_feeds):
     """Test ViewSavedCamsScreen list scrolling when navigating beyond visible area."""
     # Create many feeds to require scrolling
-    feeds = [
-        Feed(name=f"Feed {i}", url=f"https://example.com/feed{i}.m3u8") for i in range(50)
-    ]
+    feeds = [Feed(name=f"Feed {i}", url=f"https://example.com/feed{i}.m3u8") for i in range(50)]
     mock_load_feeds.return_value = feeds
 
     screen = ViewSavedCamsScreen()
@@ -307,4 +305,3 @@ def test_view_saved_cams_screen_continuing_functionally_when_some_feed_entries_i
     screen = ViewSavedCamsScreen()
     # Verify it handles partial validity
     assert hasattr(screen, "_filter_valid_feeds")
-

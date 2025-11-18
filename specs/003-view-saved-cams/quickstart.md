@@ -48,11 +48,11 @@ class ViewSavedCamsScreen(Screen):
         ("escape", "return_to_menu", "Back"),
         ("q", "return_to_menu", "Back"),
     ]
-    
+
     def compose(self):
         yield ListView(id="feeds-list")
         yield Static("", id="empty-message")
-    
+
     def on_mount(self):
         feeds = load_feeds()
         valid_feeds = self._filter_valid_feeds(feeds)
@@ -123,11 +123,11 @@ def test_load_and_display_feeds():
     # Arrange
     feeds = [Feed(name="Panda Cam", url="https://example.com/panda.m3u8")]
     # Mock load_feeds to return feeds
-    
+
     # Act
     screen = ViewSavedCamsScreen()
     screen.on_mount()
-    
+
     # Assert
     list_view = screen.query_one("#feeds-list", ListView)
     assert len(list_view.children) == 1
@@ -192,7 +192,7 @@ def _resolve_duplicate_names(self, feeds: list[Feed]) -> list[tuple[Feed, str]]:
     """Returns list of (feed, display_name) tuples."""
     name_counts = {}
     result = []
-    
+
     for feed in feeds:
         base_name = feed.name
         if base_name in name_counts:
@@ -202,7 +202,7 @@ def _resolve_duplicate_names(self, feeds: list[Feed]) -> list[tuple[Feed, str]]:
             name_counts[base_name] = 1
             display_name = base_name
         result.append((feed, display_name))
-    
+
     return result
 ```
 
@@ -226,7 +226,7 @@ def _show_empty_state(self):
     empty_msg = self.query_one("#empty-message", Static)
     empty_msg.update("No feeds saved. Use 'Add a New Cam' to add feeds.")
     empty_msg.visible = True
-    
+
     list_view = self.query_one("#feeds-list", ListView)
     list_view.visible = False
 ```
@@ -354,4 +354,3 @@ After implementing Story 3:
 - [Textual Screen Documentation](https://textual.textualize.io/guide/screens/)
 - [Feed Manager Contract](../001-launch-tui/contracts/feed-manager.md)
 - [Existing Main Menu Implementation](../001-launch-tui/)
-
