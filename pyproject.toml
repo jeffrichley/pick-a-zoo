@@ -24,6 +24,9 @@ dependencies = [
     "textual>=6.6.0",
 ]
 
+[project.scripts]
+pickazoo = "pick_a_zoo.cli:main"
+
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0.0",
@@ -70,6 +73,7 @@ warn_no_return = true
 module = [
     "ffpyplayer.*",
     "m3u8.*",
+    "yaml",
 ]
 ignore_missing_imports = true
 
