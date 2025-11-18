@@ -11,14 +11,14 @@ Launch a beautiful terminal user interface (TUI) that serves as the main entry p
 
 ## Technical Context
 
-**Language/Version**: Python 3.12  
-**Primary Dependencies**: textual (TUI framework), rich (rendering engine), PyYAML (configuration file handling), pydantic (data model validation), platformdirs (cross-platform config paths), loguru (structured logging)  
-**Storage**: YAML configuration file (feeds.yaml) stored in platform-appropriate user data directory via platformdirs  
-**Testing**: pytest (unit tests), textual snapshot testing for TUI layout  
-**Target Platform**: Cross-platform terminal (Linux, macOS, Windows) supporting ANSI color codes  
-**Project Type**: single (CLI application)  
-**Performance Goals**: TUI launches within 1 second of command execution (SC-001)  
-**Constraints**: Terminal minimum size 80x24 (with graceful degradation), must handle missing/corrupted config files without crashing  
+**Language/Version**: Python 3.12
+**Primary Dependencies**: textual (TUI framework), rich (rendering engine), PyYAML (configuration file handling), pydantic (data model validation), platformdirs (cross-platform config paths), loguru (structured logging)
+**Storage**: YAML configuration file (feeds.yaml) stored in platform-appropriate user data directory via platformdirs
+**Testing**: pytest (unit tests), textual snapshot testing for TUI layout
+**Target Platform**: Cross-platform terminal (Linux, macOS, Windows) supporting ANSI color codes
+**Project Type**: single (CLI application)
+**Performance Goals**: TUI launches within 1 second of command execution (SC-001)
+**Constraints**: Terminal minimum size 80x24 (with graceful degradation), must handle missing/corrupted config files without crashing
 **Scale/Scope**: Single-user desktop application, 4 menu options, configuration file with unlimited feed entries
 
 ## Constitution Check

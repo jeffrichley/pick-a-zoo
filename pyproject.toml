@@ -17,6 +17,7 @@ dependencies = [
     "m3u8>=6.0.0",
     "pillow>=12.0.0",
     "platformdirs>=4.5.0",
+    "playwright>=1.40.0",
     "pydantic>=2.12.4",
     "pyqt6>=6.10.0",
     "pyyaml>=6.0.3",
@@ -76,6 +77,18 @@ module = [
     "yaml",
 ]
 ignore_missing_imports = true
+
+[tool.pyright]
+include = ["src", "tests"]
+exclude = ["**/__pycache__", "**/node_modules", ".venv", "venv"]
+executionEnvironments = [
+    { root = "src", extraPaths = ["src"] },
+    { root = "tests", extraPaths = ["src"] }
+]
+pythonVersion = "3.12"
+typeCheckingMode = "basic"
+reportMissingImports = true
+reportMissingTypeStubs = false
 
 [dependency-groups]
 dev = [

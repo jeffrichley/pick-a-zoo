@@ -1,6 +1,15 @@
 """Pydantic models for Pick-a-Zoo data structures."""
 
-from pydantic import BaseModel, Field, HttpUrl, field_validator
+from typing import Annotated
+
+from pydantic import BaseModel, BeforeValidator, Field, HttpUrl, field_validator
+
+
+def validate_url(v: str | HttpUrl) -> HttpUrl:
+    """Validate and convert string to HttpUrl."""
+    if isinstance(v, HttpUrl):
+        return v
+    return HttpUrl(v)
 
 
 class WindowSize(BaseModel):
@@ -10,11 +19,15 @@ class WindowSize(BaseModel):
     height: int = Field(gt=0, description="Window height in pixels (must be > 0)")
 
 
+# Default window size for new feeds (1280x720 HD)
+DEFAULT_WINDOW_SIZE = WindowSize(width=1280, height=720)
+
+
 class Feed(BaseModel):
     """Represents a single camera feed entry."""
 
     name: str = Field(min_length=1, description="Feed name (required, non-empty)")
-    url: HttpUrl
+    url: Annotated[str | HttpUrl, BeforeValidator(validate_url)]
     window_size: WindowSize | None = None
 
     @field_validator("name")
@@ -25,4 +38,3 @@ class Feed(BaseModel):
         if not stripped:
             raise ValueError("Feed name must be a non-empty string after stripping whitespace")
         return stripped
-

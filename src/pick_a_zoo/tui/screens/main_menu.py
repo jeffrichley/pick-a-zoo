@@ -8,6 +8,7 @@ from textual.screen import Screen
 from textual.widgets import Label, ListItem, ListView, Static
 
 from pick_a_zoo.core.feed_manager import load_feeds
+from pick_a_zoo.tui.screens.add_feed import AddFeedScreen
 
 
 class MainMenuScreen(Screen):
@@ -115,8 +116,8 @@ class MainMenuScreen(Screen):
             logger.info("View Saved Cams selected (not yet implemented)")
             # Future: push ViewSavedCamsScreen()
         elif option == "add":
-            logger.info("Add a New Cam selected (not yet implemented)")
-            # Future: push AddCamScreen()
+            logger.info("Add a New Cam selected")
+            self.app.push_screen(AddFeedScreen())
         elif option == "watch":
             logger.info("Watch a Cam selected (not yet implemented)")
             # Future: push WatchCamScreen()
@@ -165,4 +166,3 @@ class MainMenuScreen(Screen):
         current_index = menu_list.index
         if current_index is not None and current_index < len(self.MENU_OPTIONS) - 1:
             menu_list.index = current_index + 1
-

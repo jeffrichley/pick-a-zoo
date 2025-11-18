@@ -1,7 +1,7 @@
 # Research: Launch the Pick-a-Zoo TUI
 
-**Feature**: Launch the Pick-a-Zoo TUI  
-**Date**: 2024-12-19  
+**Feature**: Launch the Pick-a-Zoo TUI
+**Date**: 2024-12-19
 **Phase**: 0 - Outline & Research
 
 ## Research Decisions
@@ -10,7 +10,7 @@
 
 **Decision**: Use Textual framework for TUI implementation
 
-**Rationale**: 
+**Rationale**:
 - Textual is a high-level, reactive, widget-based TUI framework that provides modern development patterns
 - Built on Rich, which provides excellent rendering capabilities (colors, emojis, styled text)
 - Supports full-screen TUI, keyboard navigation, hotkeys, and screen routing out of the box
@@ -137,7 +137,7 @@ PickAZooApp (Textual App)
 # Library interface (constitution: library-first)
 def load_feeds() -> list[Feed]:
     """Load feeds from YAML file. Returns empty list if file missing."""
-    
+
 def save_feeds(feeds: list[Feed]) -> None:
     """Save feeds to YAML file atomically."""
 ```
@@ -153,4 +153,3 @@ def save_feeds(feeds: list[Feed]) -> None:
 ## Unresolved Questions
 
 None - all technical decisions resolved based on spec requirements and tech stack documentation.
-

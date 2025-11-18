@@ -1,0 +1,29 @@
+﻿# pick-a-zoo Development Guidelines
+
+Auto-generated from all feature plans. Last updated: 2025-11-18
+
+## Active Technologies
+
+- Python 3.12 + httpx (HTTP client), beautifulsoup4 (HTML parsing), lxml (HTML parser backend), m3u8 (HLS playlist parsing), PyYAML (configuration file handling), pydantic (data model validation), textual (TUI framework), rich (rendering engine), platformdirs (cross-platform config paths), loguru (structured logging) (002-add-cam-feed)
+
+## Project Structure
+
+```text
+src/
+tests/
+```
+
+## Commands
+
+cd src; pytest; ruff check .
+
+## Code Style
+
+Python 3.12: Follow standard conventions
+
+## Recent Changes
+
+- 002-add-cam-feed: Added Python 3.12 + httpx (HTTP client), beautifulsoup4 (HTML parsing), lxml (HTML parser backend), m3u8 (HLS playlist parsing), PyYAML (configuration file handling), pydantic (data model validation), textual (TUI framework), rich (rendering engine), platformdirs (cross-platform config paths), loguru (structured logging)
+
+<!-- MANUAL ADDITIONS START -->
+<!-- MANUAL ADDITIONS END -->

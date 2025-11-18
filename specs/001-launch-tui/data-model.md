@@ -1,7 +1,7 @@
 # Data Model: Launch the Pick-a-Zoo TUI
 
-**Feature**: Launch the Pick-a-Zoo TUI  
-**Date**: 2024-12-19  
+**Feature**: Launch the Pick-a-Zoo TUI
+**Date**: 2024-12-19
 **Phase**: 1 - Design & Contracts
 
 ## Entities
@@ -101,4 +101,3 @@ feeds:
 - File writes must be atomic to prevent corruption
 - Feed names should be unique (enforced in future story, not required for Story 1)
 - Maximum file size: No explicit limit, but practical limit based on reasonable number of feeds (< 1000)
-

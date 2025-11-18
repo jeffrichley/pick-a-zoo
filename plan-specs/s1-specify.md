@@ -5,7 +5,7 @@
 Provide a clean, attractive terminal UI that allows users to navigate the core features of Pick-a-Zoo without remembering commands.
 
 ## 🧠 Why This Matters
-A TUI serves as the user’s main entry point.  
+A TUI serves as the user’s main entry point.
 It simplifies onboarding, makes the demo fun, and highlights modularity in the architecture.
 
 ## 🔍 User Story

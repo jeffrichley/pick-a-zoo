@@ -82,4 +82,3 @@ def test_main_menu_screen_terminal_size_warning(mock_load_feeds):
     assert hasattr(screen, "_check_terminal_size")
     assert screen.MIN_TERMINAL_WIDTH == 80
     assert screen.MIN_TERMINAL_HEIGHT == 24
-

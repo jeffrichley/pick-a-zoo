@@ -1,7 +1,7 @@
 # Specification Quality Checklist: Launch the Pick-a-Zoo TUI
 
-**Purpose**: Validate specification completeness and quality before proceeding to planning  
-**Created**: 2024-12-19  
+**Purpose**: Validate specification completeness and quality before proceeding to planning
+**Created**: 2024-12-19
 **Feature**: [spec.md](../spec.md)
 
 ## Content Quality
@@ -33,4 +33,3 @@
 
 - All checklist items pass validation
 - Specification is ready for `/speckit.clarify` or `/speckit.plan`
-

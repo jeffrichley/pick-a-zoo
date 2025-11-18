@@ -3,13 +3,13 @@
 This module follows the library-first architecture principle and is independently testable.
 """
 
+import re
 import shutil
 import tempfile
 from pathlib import Path
 
 import yaml
 from loguru import logger
-from platformdirs import user_data_dir
 
 from pick_a_zoo.core.models import Feed
 
@@ -18,12 +18,10 @@ def get_config_path() -> Path:
     """Get the path to the feeds configuration file.
 
     Returns:
-        Path: Path to feeds.yaml in platform-appropriate user data directory.
+        Path: Path to feeds.yaml in .pickazoo directory in current working directory.
     """
-    app_name = "pick-a-zoo"
-    app_author = "pick-a-zoo"
-    data_dir = Path(user_data_dir(app_name, app_author))
-    config_path = data_dir / "feeds.yaml"
+    config_dir = Path.cwd() / ".pickazoo"
+    config_path = config_dir / "feeds.yaml"
     return config_path
 
 
@@ -172,6 +170,62 @@ def save_feeds(feeds: list[Feed]) -> None:
         raise
 
 
+def resolve_duplicate_name(name: str, existing_feeds: list[Feed]) -> str:
+    """Resolve duplicate feed names by appending number suffix.
+
+    If the name is unique, returns it as-is. If duplicate, appends " (2)", " (3)", etc.
+    until a unique name is found. Handles names that already have number suffixes.
+
+    Args:
+        name: Proposed feed name
+        existing_feeds: List of existing Feed objects to check against
+
+    Returns:
+        Resolved unique name (e.g., "Panda Cam (2)")
+
+    Examples:
+        >>> feeds = [Feed(name="Panda Cam", url="https://example.com/1")]
+        >>> resolve_duplicate_name("Panda Cam", feeds)
+        'Panda Cam (2)'
+        >>> resolve_duplicate_name("Otter Live", feeds)
+        'Otter Live'
+    """
+    existing_names = {feed.name for feed in existing_feeds}
+
+    # If name is unique, return as-is
+    if name not in existing_names:
+        logger.debug(f"Name '{name}' is unique")
+        return name
+
+    # Find the highest number suffix for this base name
+    base_name = name
+    max_suffix = 1
+
+    # Check if name already has a number suffix like "Name (2)"
+    suffix_pattern = r"^(.+?)\s+\((\d+)\)$"
+    match = re.match(suffix_pattern, name)
+    if match:
+        base_name = match.group(1)
+        max_suffix = int(match.group(2))
+
+    # Find all existing names with this base name
+    for existing_name in existing_names:
+        if existing_name == base_name:
+            max_suffix = max(max_suffix, 1)
+        elif existing_name.startswith(f"{base_name} ("):
+            # Extract number from "Base Name (N)" format
+            name_match = re.match(rf"^{re.escape(base_name)}\s+\((\d+)\)$", existing_name)
+            if name_match:
+                suffix_num = int(name_match.group(1))
+                max_suffix = max(max_suffix, suffix_num)
+
+    # Generate unique name with incremented suffix
+    new_suffix = max_suffix + 1
+    resolved_name = f"{base_name} ({new_suffix})"
+    logger.debug(f"Resolved duplicate name '{name}' to '{resolved_name}'")
+    return resolved_name
+
+
 def _create_empty_config_file(config_path: Path) -> None:
     """Create an empty configuration file with default structure.
 
@@ -190,4 +244,3 @@ def _create_empty_config_file(config_path: Path) -> None:
     except (PermissionError, OSError) as e:
         logger.error(f"Failed to create empty config file: {e}")
         raise
-

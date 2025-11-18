@@ -192,3 +192,49 @@ def test_save_feeds_validates_feeds():
     with pytest.raises(ValueError, match="Invalid feed object"):
         save_feeds(invalid_feeds)  # type: ignore[arg-type]
 
+
+@pytest.mark.unit
+def test_resolve_duplicate_name_with_unique_name():
+    """Test resolve_duplicate_name() with unique name."""
+    from pick_a_zoo.core.feed_manager import resolve_duplicate_name
+
+    existing_feeds = [Feed(name="Panda Cam", url="https://example.com/1")]
+    result = resolve_duplicate_name("Otter Live", existing_feeds)
+    assert result == "Otter Live"
+
+
+@pytest.mark.unit
+def test_resolve_duplicate_name_with_single_duplicate():
+    """Test resolve_duplicate_name() with single duplicate (appends " (2)")."""
+    from pick_a_zoo.core.feed_manager import resolve_duplicate_name
+
+    existing_feeds = [Feed(name="Panda Cam", url="https://example.com/1")]
+    result = resolve_duplicate_name("Panda Cam", existing_feeds)
+    assert result == "Panda Cam (2)"
+
+
+@pytest.mark.unit
+def test_resolve_duplicate_name_with_multiple_duplicates():
+    """Test resolve_duplicate_name() with multiple duplicates (increments number)."""
+    from pick_a_zoo.core.feed_manager import resolve_duplicate_name
+
+    existing_feeds = [
+        Feed(name="Panda Cam", url="https://example.com/1"),
+        Feed(name="Panda Cam (2)", url="https://example.com/2"),
+        Feed(name="Panda Cam (3)", url="https://example.com/3"),
+    ]
+    result = resolve_duplicate_name("Panda Cam", existing_feeds)
+    assert result == "Panda Cam (4)"
+
+
+@pytest.mark.unit
+def test_resolve_duplicate_name_edge_case_with_existing_number_suffix():
+    """Test resolve_duplicate_name() edge case (name with existing number suffix)."""
+    from pick_a_zoo.core.feed_manager import resolve_duplicate_name
+
+    existing_feeds = [
+        Feed(name="Panda Cam (2)", url="https://example.com/1"),
+    ]
+    # When resolving "Panda Cam (2)", it should extract base name and increment
+    result = resolve_duplicate_name("Panda Cam (2)", existing_feeds)
+    assert result == "Panda Cam (3)"

@@ -1,8 +1,8 @@
 # Feature Specification: Launch the Pick-a-Zoo TUI
 
-**Feature Branch**: `001-launch-tui`  
-**Created**: 2024-12-19  
-**Status**: Draft  
+**Feature Branch**: `001-launch-tui`
+**Created**: 2024-12-19
+**Status**: Draft
 **Input**: User description: "we are working on the Story 1 — Launch the Pick-a-Zoo TUI. you should read the docs in plan directory and the @s1-specify.md"
 
 ## Clarifications
