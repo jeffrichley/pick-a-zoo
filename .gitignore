@@ -147,6 +147,7 @@ cython_debug/
 snapshots/
 *.yaml.bak
 *.yml.bak
+.pickazoo/
 
 # OS files
 Thumbs.db

@@ -10,6 +10,10 @@ class WindowSize(BaseModel):
     height: int = Field(gt=0, description="Window height in pixels (must be > 0)")
 
 
+# Default window size for new feeds (1280x720 HD)
+DEFAULT_WINDOW_SIZE = WindowSize(width=1280, height=720)
+
+
 class Feed(BaseModel):
     """Represents a single camera feed entry."""
 

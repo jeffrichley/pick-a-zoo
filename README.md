@@ -22,6 +22,9 @@ uv sync
 
 # Install the package
 uv pip install -e .
+
+# Install Playwright browsers (optional, for JavaScript-rendered pages)
+uv run playwright install chromium
 ```
 
 ## Usage
@@ -57,11 +60,9 @@ uv run pickazoo
 
 ## Configuration
 
-Camera feeds are stored in a YAML configuration file located in a platform-appropriate user data directory:
+Camera feeds are stored in a YAML configuration file located in a local `.pickazoo` directory:
 
-- **Linux**: `~/.local/share/pick-a-zoo/feeds.yaml`
-- **macOS**: `~/Library/Application Support/pick-a-zoo/feeds.yaml`
-- **Windows**: `%LOCALAPPDATA%\pick-a-zoo\feeds.yaml`
+- **Location**: `.pickazoo/feeds.yaml` (relative to the current working directory)
 
 The configuration file is automatically created on first run if it doesn't exist.
 
