@@ -5,7 +5,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from pick_a_zoo.core.feed_discovery import URLType, URLValidationResult, detect_url_type
+from pick_a_zoo.core.feed_discovery import URLType, detect_url_type
 from pick_a_zoo.core.feed_manager import load_feeds, resolve_duplicate_name, save_feeds
 from pick_a_zoo.core.models import Feed
 
@@ -15,7 +15,6 @@ from pick_a_zoo.core.models import Feed
 def test_end_to_end_direct_stream_feed_addition(mock_client_class, tmp_path: Path):
     """Test end-to-end direct stream feed addition."""
     from pick_a_zoo.core.feed_discovery import validate_url_accessibility
-    from pick_a_zoo.core.feed_manager import get_config_path
 
     # Mock URL detection and validation
     mock_response = Mock()
@@ -58,8 +57,6 @@ def test_end_to_end_direct_stream_feed_addition(mock_client_class, tmp_path: Pat
 @pytest.mark.integration
 def test_duplicate_name_resolution_integration(tmp_path: Path):
     """Test duplicate name resolution integration."""
-    from pick_a_zoo.core.feed_manager import get_config_path
-
     config_file = tmp_path / "feeds.yaml"
     with patch("pick_a_zoo.core.feed_manager.get_config_path", return_value=config_file):
         # Create first feed

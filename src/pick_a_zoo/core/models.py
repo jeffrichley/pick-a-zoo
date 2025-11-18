@@ -1,6 +1,15 @@
 """Pydantic models for Pick-a-Zoo data structures."""
 
-from pydantic import BaseModel, Field, HttpUrl, field_validator
+from typing import Annotated
+
+from pydantic import BaseModel, BeforeValidator, Field, HttpUrl, field_validator
+
+
+def validate_url(v: str | HttpUrl) -> HttpUrl:
+    """Validate and convert string to HttpUrl."""
+    if isinstance(v, HttpUrl):
+        return v
+    return HttpUrl(v)
 
 
 class WindowSize(BaseModel):
@@ -18,7 +27,7 @@ class Feed(BaseModel):
     """Represents a single camera feed entry."""
 
     name: str = Field(min_length=1, description="Feed name (required, non-empty)")
-    url: HttpUrl
+    url: Annotated[str | HttpUrl, BeforeValidator(validate_url)]
     window_size: WindowSize | None = None
 
     @field_validator("name")

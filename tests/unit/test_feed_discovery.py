@@ -6,13 +6,10 @@ import httpx
 import pytest
 
 from pick_a_zoo.core.feed_discovery import (
-    HTMLParseError,
-    StreamCandidate,
     URLType,
     URLValidationError,
     URLValidationResult,
     detect_url_type,
-    extract_streams_from_html,
     validate_url_accessibility,
 )
 

@@ -13,7 +13,6 @@ from pick_a_zoo.core.feed_discovery import (
     HTMLParseError,
     URLType,
     URLValidationError,
-    URLValidationResult,
     detect_url_type,
     extract_streams_from_html,
     validate_url_accessibility,
@@ -156,8 +155,9 @@ class AddFeedScreen(Screen):
                 else:
                     # Show error and allow retry
                     self.current_state = "error"
+                    error_msg = validation_result.error_message or "Unknown error"
                     self.error_message = (
-                        f"URL is not accessible: {validation_result.error_message or 'Unknown error'}. "
+                        f"URL is not accessible: {error_msg}. "
                         "Please check the URL and try again, or press 'q' to cancel."
                     )
                     self._update_display()
@@ -198,7 +198,7 @@ class AddFeedScreen(Screen):
         try:
             # Fetch HTML content with browser-like headers to avoid bot detection
             from pick_a_zoo.core.feed_discovery import _get_browser_headers
-            
+
             headers = _get_browser_headers(url)
             with httpx.Client(timeout=30.0, follow_redirects=True, headers=headers) as client:
                 response = client.get(url)
@@ -217,7 +217,8 @@ class AddFeedScreen(Screen):
                 self.current_state = "error"
                 self.error_message = (
                     "No playable streams found on this page. "
-                    "Please try a different URL or provide a direct stream URL, or press 'q' to cancel."
+                    "Please try a different URL or provide a direct stream URL, "
+                    "or press 'q' to cancel."
                 )
                 self._update_display()
             elif len(self.stream_candidates) == 1:
@@ -239,23 +240,30 @@ class AddFeedScreen(Screen):
             if e.response.status_code == 403:
                 try:
                     from pick_a_zoo.core.feed_discovery import fetch_html_with_playwright
-                    
+
                     status_widget.update("Access denied. Trying with browser automation...")
                     logger.info("403 error detected, attempting Playwright fallback")
                     html_content = fetch_html_with_playwright(url, timeout=30.0)
-                    
+
                     # Extract streams from Playwright-fetched HTML
                     status_widget.update("Extracting streams from page...")
                     self.stream_candidates = extract_streams_from_html(html_content, url)
-                    
+
                     if len(self.stream_candidates) > 0:
                         # Found streams with Playwright!
                         if len(self.stream_candidates) == 1:
-                            logger.info(f"Single stream found with Playwright, auto-selecting: {self.stream_candidates[0].url}")
-                            self._save_direct_stream_feed(self.stream_candidates[0].url)
+                            stream_url = self.stream_candidates[0].url
+                            logger.info(
+                                f"Single stream found with Playwright, "
+                                f"auto-selecting: {stream_url}"
+                            )
+                            self._save_direct_stream_feed(stream_url)
                             return
                         else:
-                            logger.info(f"Found {len(self.stream_candidates)} streams with Playwright, showing selection")
+                            logger.info(
+                                f"Found {len(self.stream_candidates)} streams "
+                                "with Playwright, showing selection"
+                            )
                             self.current_state = "stream_selection"
                             self._update_display()
                             stream_list = self.query_one("#stream-list", ListView)
@@ -266,30 +274,43 @@ class AddFeedScreen(Screen):
                         self.current_state = "error"
                         self.error_message = (
                             "Page loaded successfully but no playable streams were found. "
-                            "The page may not contain embedded video streams, or they may be loaded dynamically. "
-                            "Please try a direct stream URL instead, or press 'q' to cancel."
+                            "The page may not contain embedded video streams, "
+                            "or they may be loaded dynamically. "
+                            "Please try a direct stream URL instead, "
+                            "or press 'q' to cancel."
                         )
                         self._update_display()
                         return
-                        
+
                 except Exception as playwright_error:
                     logger.warning(f"Playwright fallback failed: {playwright_error}")
                     # Fall through to error message below
-            
-            # Try to extract streams from error page HTML anyway (some sites return HTML even on 403)
+
+            # Try to extract streams from error page HTML anyway
+            # (some sites return HTML even on 403)
             if e.response.status_code == 403:
                 try:
                     html_content = e.response.text
-                    logger.info(f"Attempting stream extraction from 403 response ({len(html_content)} bytes)")
+                    logger.info(
+                        f"Attempting stream extraction from 403 response "
+                        f"({len(html_content)} bytes)"
+                    )
                     self.stream_candidates = extract_streams_from_html(html_content, url)
                     if len(self.stream_candidates) > 0:
                         # Found streams despite 403!
                         if len(self.stream_candidates) == 1:
-                            logger.info(f"Single stream found despite 403, auto-selecting: {self.stream_candidates[0].url}")
-                            self._save_direct_stream_feed(self.stream_candidates[0].url)
+                            stream_url = self.stream_candidates[0].url
+                            logger.info(
+                                f"Single stream found despite 403, "
+                                f"auto-selecting: {stream_url}"
+                            )
+                            self._save_direct_stream_feed(stream_url)
                             return
                         else:
-                            logger.info(f"Found {len(self.stream_candidates)} streams despite 403, showing selection")
+                            logger.info(
+                                f"Found {len(self.stream_candidates)} streams "
+                                "despite 403, showing selection"
+                            )
                             self.current_state = "stream_selection"
                             self._update_display()
                             stream_list = self.query_one("#stream-list", ListView)
@@ -297,14 +318,16 @@ class AddFeedScreen(Screen):
                             return
                 except Exception as parse_error:
                     logger.warning(f"Failed to parse 403 response: {parse_error}")
-            
+
             # No streams found or parsing failed
             self.current_state = "error"
             if e.response.status_code == 403:
                 self.error_message = (
-                    "Access denied (403 Forbidden). The site may be blocking automated requests. "
+                    "Access denied (403 Forbidden). "
+                    "The site may be blocking automated requests. "
                     "Browser automation (Playwright) was attempted but failed. "
-                    "Try accessing the page in a browser first, or provide a direct stream URL instead. "
+                    "Try accessing the page in a browser first, "
+                    "or provide a direct stream URL instead. "
                     "Press 'q' to cancel."
                 )
             else:
@@ -356,8 +379,7 @@ class AddFeedScreen(Screen):
             resolved_name = resolve_duplicate_name(self.feed_name or "Unnamed Feed", existing_feeds)
 
             # Create feed with default window size
-            # Pydantic HttpUrl accepts strings and validates them
-            feed = Feed(name=resolved_name, url=url, window_size=DEFAULT_WINDOW_SIZE)  # type: ignore[arg-type]
+            feed = Feed(name=resolved_name, url=url, window_size=DEFAULT_WINDOW_SIZE)
 
             # Add to list and save
             existing_feeds.append(feed)
