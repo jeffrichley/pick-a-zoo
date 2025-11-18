@@ -344,7 +344,7 @@ class VideoPlayer:
                                 else:
                                     logger.warning("to_bytearray() returned empty list")
                                     return None
-                            elif isinstance(byte_result, (bytes, bytearray)):
+                            elif isinstance(byte_result, bytes | bytearray):
                                 logger.debug("to_bytearray() returned bytes/bytearray directly")
                                 byte_data = byte_result
                             else:
@@ -359,7 +359,7 @@ class VideoPlayer:
                                 list_len = len(byte_data)
                                 logger.debug(f"Converting list to bytes, list length: {list_len}")
                                 byte_data = bytes(byte_data)
-                            elif not isinstance(byte_data, (bytes, bytearray)):
+                            elif not isinstance(byte_data, bytes | bytearray):
                                 byte_data_type = type(byte_data)
                                 logger.warning(
                                     f"byte_data is unexpected type: {byte_data_type}, "
