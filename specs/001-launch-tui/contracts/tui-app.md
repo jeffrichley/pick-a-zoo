@@ -1,7 +1,7 @@
 # TUI Application Contract
 
-**Module**: `pick_a_zoo.tui.app`  
-**Type**: Internal Application API  
+**Module**: `pick_a_zoo.tui.app`
+**Type**: Internal Application API
 **Constitution**: Library-First Architecture (Principle II)
 
 ## Overview
@@ -111,4 +111,3 @@ Integration tests must cover:
 - Feed loading integration
 - Screen transitions
 - Error recovery scenarios
-

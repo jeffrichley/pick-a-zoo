@@ -1,7 +1,7 @@
 # Feed Manager Contract
 
-**Module**: `pick_a_zoo.core.feed_manager`  
-**Type**: Internal Library API  
+**Module**: `pick_a_zoo.core.feed_manager`
+**Type**: Internal Library API
 **Constitution**: Library-First Architecture (Principle II)
 
 ## Overview
@@ -129,4 +129,3 @@ Unit tests must cover:
 - Invalid Feed data validation
 - Atomic write operations
 - Cross-platform path resolution
-

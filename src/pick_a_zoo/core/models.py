@@ -38,4 +38,3 @@ class Feed(BaseModel):
         if not stripped:
             raise ValueError("Feed name must be a non-empty string after stripping whitespace")
         return stripped
-

@@ -33,4 +33,3 @@ uv run python test_playwright.py
 ```
 
 Or just use the app normally - it will automatically use Playwright when needed!
-

@@ -195,4 +195,3 @@ feeds:
 * Default snapshot folder
 * Autoplay on selection
 * TUI theme (light/dark/solarized/“zoo mode”)
-

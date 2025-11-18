@@ -1,7 +1,7 @@
 # Feed Manager Extension Contract
 
-**Module**: `pick_a_zoo.core.feed_manager`  
-**Type**: Internal Library API Extension  
+**Module**: `pick_a_zoo.core.feed_manager`
+**Type**: Internal Library API Extension
 **Constitution**: Library-First Architecture (Principle II)
 
 ## Overview
@@ -85,4 +85,3 @@ Unit tests must cover:
 - Multiple duplicate resolution (increments number)
 - Edge cases (name with existing number suffix, empty name, etc.)
 - Integration with `save_feeds()` (duplicate resolution before save)
-

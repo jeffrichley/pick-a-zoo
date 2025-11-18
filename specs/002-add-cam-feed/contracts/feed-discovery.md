@@ -1,7 +1,7 @@
 # Feed Discovery Contract
 
-**Module**: `pick_a_zoo.core.feed_discovery`  
-**Type**: Internal Library API  
+**Module**: `pick_a_zoo.core.feed_discovery`
+**Type**: Internal Library API
 **Constitution**: Library-First Architecture (Principle II)
 
 ## Overview
@@ -194,4 +194,3 @@ Unit tests must cover:
 - `httpx`: HTTP client for URL validation and HTML fetching
 - `beautifulsoup4`: HTML parsing for stream extraction
 - `lxml`: HTML parser backend (faster, more robust)
-

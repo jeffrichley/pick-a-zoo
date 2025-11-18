@@ -1,8 +1,8 @@
 # Feature Specification: Add a New Live Cam Feed
 
-**Feature Branch**: `002-add-cam-feed`  
-**Created**: 2024-12-19  
-**Status**: Draft  
+**Feature Branch**: `002-add-cam-feed`
+**Created**: 2024-12-19
+**Status**: Draft
 **Input**: User description: "read files in the plan directory. we are working on the story Story 2 — Add a New Live Cam Feed. @s2-specify.md"
 
 ## Clarifications
@@ -142,4 +142,3 @@ As a user, I want clear error messages when adding feeds fails so that I underst
 - Users understand basic error messages and can take appropriate action (retry, cancel, try different URL)
 - The system has sufficient memory and processing resources to parse HTML pages and extract stream URLs
 - Feed names are user-provided identifiers; duplicate names are automatically resolved by appending number suffixes
-

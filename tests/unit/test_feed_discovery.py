@@ -202,4 +202,3 @@ def test_validate_url_accessibility_with_redirect_handling(mock_client_class):
     result = validate_url_accessibility(url)
     assert result.is_accessible is True
     assert result.status_code == 200
-

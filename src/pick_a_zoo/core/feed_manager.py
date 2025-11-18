@@ -244,4 +244,3 @@ def _create_empty_config_file(config_path: Path) -> None:
     except (PermissionError, OSError) as e:
         logger.error(f"Failed to create empty config file: {e}")
         raise
-

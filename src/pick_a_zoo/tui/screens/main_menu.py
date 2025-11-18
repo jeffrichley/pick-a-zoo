@@ -166,4 +166,3 @@ class MainMenuScreen(Screen):
         current_index = menu_list.index
         if current_index is not None and current_index < len(self.MENU_OPTIONS) - 1:
             menu_list.index = current_index + 1
-

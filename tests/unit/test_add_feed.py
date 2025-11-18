@@ -42,9 +42,7 @@ def test_add_feed_screen_direct_stream_workflow_success_case(
     from pick_a_zoo.core.feed_discovery import URLType, URLValidationResult
 
     mock_detect_url_type.return_value = URLType.DIRECT_STREAM
-    mock_validate_url.return_value = URLValidationResult(
-        is_accessible=True, status_code=200
-    )
+    mock_validate_url.return_value = URLValidationResult(is_accessible=True, status_code=200)
     mock_load_feeds.return_value = []
     mock_resolve_duplicate_name.return_value = "Panda Cam"
 
@@ -93,4 +91,3 @@ def test_add_feed_screen_cancellation_at_url_entry():
     screen = AddFeedScreen()
     # Test that cancellation returns to main menu
     assert hasattr(screen, "on_cancel") or hasattr(screen, "action_cancel")
-

@@ -1,6 +1,6 @@
 # Quick Start: Add a New Live Cam Feed
 
-**Feature**: 002-add-cam-feed  
+**Feature**: 002-add-cam-feed
 **Date**: 2024-12-19
 
 ## Overview
@@ -88,15 +88,15 @@ from pick_a_zoo.core.models import Feed
 
 class AddFeedScreen(Screen):
     """Screen for adding new camera feeds."""
-    
+
     def compose(self):
         # Implementation: Textual widgets for name/URL input
         pass
-    
+
     def on_input_submitted(self, name: str):
         # Implementation: handle name input
         pass
-    
+
     def on_url_submitted(self, url: str):
         # Implementation: handle URL input, detect type, extract streams
         pass
@@ -193,4 +193,3 @@ All dependencies are already in `pyproject.toml`:
 - [Add Feed Screen Contract](./contracts/add-feed-screen.md)
 - [Data Model](./data-model.md)
 - [Research Findings](./research.md)
-

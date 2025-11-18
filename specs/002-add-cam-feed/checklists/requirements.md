@@ -1,7 +1,7 @@
 # Specification Quality Checklist: Add a New Live Cam Feed
 
-**Purpose**: Validate specification completeness and quality before proceeding to planning  
-**Created**: 2024-12-19  
+**Purpose**: Validate specification completeness and quality before proceeding to planning
+**Created**: 2024-12-19
 **Feature**: [spec.md](../spec.md)
 
 ## Content Quality
@@ -34,4 +34,3 @@
 - All checklist items pass validation
 - Specification is ready for `/speckit.clarify` or `/speckit.plan`
 - Note: References to "feeds.yaml" are acceptable as this is part of the existing system data model established in Story 1, not an implementation detail
-
