@@ -57,10 +57,6 @@ def test_end_to_end_direct_stream_feed_addition(mock_client_class, tmp_path: Pat
 @pytest.mark.integration
 def test_duplicate_name_resolution_integration(tmp_path: Path):
     """Test duplicate name resolution integration."""
-<<<<<<< HEAD
-=======
-
->>>>>>> 648d97dbbc44e1d48c563b18e2efe2512871323f
     config_file = tmp_path / "feeds.yaml"
     with patch("pick_a_zoo.core.feed_manager.get_config_path", return_value=config_file):
         # Create first feed

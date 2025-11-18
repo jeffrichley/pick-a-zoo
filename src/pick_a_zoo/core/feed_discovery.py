@@ -66,18 +66,11 @@ def _get_browser_headers(url: str | None = None) -> dict[str, str]:
 
 
 def fetch_html_with_playwright(url: str, timeout: float = 30.0) -> str:
-<<<<<<< HEAD
     """Fetch HTML content using Playwright (headless browser).
 
     This function uses Playwright to load the page, execute JavaScript,
     and return the rendered HTML. Useful for sites with bot protection
     or JavaScript-rendered content.
-=======
-    """Fetch HTML content using Playwright (headless browser) to handle JavaScript-rendered content.
-
-    This function uses Playwright to load the page, execute JavaScript, and return the rendered HTML.
-    Useful for sites with bot protection or JavaScript-rendered content.
->>>>>>> 648d97dbbc44e1d48c563b18e2efe2512871323f
 
     Args:
         url: URL to fetch
@@ -158,14 +151,10 @@ class StreamCandidate(BaseModel):
 
     url: str = Field(description="Extracted stream URL")
     source_type: str = Field(
-<<<<<<< HEAD
         description=(
             "How it was found (e.g., 'video_tag', 'source_tag', "
             "'m3u8_link', 'iframe')"
         )
-=======
-        description="How it was found (e.g., 'video_tag', 'source_tag', 'm3u8_link', 'iframe')"
->>>>>>> 648d97dbbc44e1d48c563b18e2efe2512871323f
     )
 
 
@@ -173,13 +162,9 @@ class URLValidationResult(BaseModel):
     """Represents the result of validating a URL's accessibility."""
 
     is_accessible: bool = Field(description="Whether URL is accessible")
-<<<<<<< HEAD
     status_code: int | None = Field(
         default=None, description="HTTP status code if available"
     )
-=======
-    status_code: int | None = Field(default=None, description="HTTP status code if available")
->>>>>>> 648d97dbbc44e1d48c563b18e2efe2512871323f
     error_message: str | None = Field(
         default=None, description="Error message if validation failed"
     )
@@ -394,18 +379,10 @@ def extract_streams_from_html(html_content: str, base_url: str) -> list[StreamCa
     for pattern, source_type in stream_patterns:
         for match in re.finditer(pattern, page_text, re.IGNORECASE):
             url = match.group(0)
-<<<<<<< HEAD
             # Filter out URLs that are clearly not streams
             # (e.g., images, CSS, JS files)
             non_stream_exts = [".jpg", ".jpeg", ".png", ".gif", ".css", ".js", ".json"]
             if any(ext in url.lower() for ext in non_stream_exts):
-=======
-            # Filter out URLs that are clearly not streams (e.g., images, CSS, JS files)
-            if any(
-                ext in url.lower()
-                for ext in [".jpg", ".jpeg", ".png", ".gif", ".css", ".js", ".json"]
-            ):
->>>>>>> 648d97dbbc44e1d48c563b18e2efe2512871323f
                 continue
             if url not in seen_urls:
                 streams.append(StreamCandidate(url=url, source_type=source_type))
@@ -423,15 +400,8 @@ def extract_streams_from_html(html_content: str, base_url: str) -> list[StreamCa
             for match in re.finditer(pattern, script_content, re.IGNORECASE):
                 url = match.group(0)
                 # Filter out non-stream URLs
-<<<<<<< HEAD
                 non_stream_exts = [".jpg", ".jpeg", ".png", ".gif", ".css", ".js", ".json"]
                 if any(ext in url.lower() for ext in non_stream_exts):
-=======
-                if any(
-                    ext in url.lower()
-                    for ext in [".jpg", ".jpeg", ".png", ".gif", ".css", ".js", ".json"]
-                ):
->>>>>>> 648d97dbbc44e1d48c563b18e2efe2512871323f
                     continue
                 if url not in seen_urls:
                     streams.append(StreamCandidate(url=url, source_type=f"script_{source_type}"))

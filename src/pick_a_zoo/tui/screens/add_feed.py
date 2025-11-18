@@ -251,7 +251,6 @@ class AddFeedScreen(Screen):
                     if len(self.stream_candidates) > 0:
                         # Found streams with Playwright!
                         if len(self.stream_candidates) == 1:
-<<<<<<< HEAD
                             stream_url = self.stream_candidates[0].url
                             logger.info(
                                 f"Single stream found with Playwright, "
@@ -263,16 +262,6 @@ class AddFeedScreen(Screen):
                             logger.info(
                                 f"Found {len(self.stream_candidates)} streams "
                                 "with Playwright, showing selection"
-=======
-                            logger.info(
-                                f"Single stream found with Playwright, auto-selecting: {self.stream_candidates[0].url}"
-                            )
-                            self._save_direct_stream_feed(self.stream_candidates[0].url)
-                            return
-                        else:
-                            logger.info(
-                                f"Found {len(self.stream_candidates)} streams with Playwright, showing selection"
->>>>>>> 648d97dbbc44e1d48c563b18e2efe2512871323f
                             )
                             self.current_state = "stream_selection"
                             self._update_display()
@@ -296,28 +285,19 @@ class AddFeedScreen(Screen):
                     logger.warning(f"Playwright fallback failed: {playwright_error}")
                     # Fall through to error message below
 
-<<<<<<< HEAD
             # Try to extract streams from error page HTML anyway
             # (some sites return HTML even on 403)
-=======
-            # Try to extract streams from error page HTML anyway (some sites return HTML even on 403)
->>>>>>> 648d97dbbc44e1d48c563b18e2efe2512871323f
             if e.response.status_code == 403:
                 try:
                     html_content = e.response.text
                     logger.info(
-<<<<<<< HEAD
                         f"Attempting stream extraction from 403 response "
                         f"({len(html_content)} bytes)"
-=======
-                        f"Attempting stream extraction from 403 response ({len(html_content)} bytes)"
->>>>>>> 648d97dbbc44e1d48c563b18e2efe2512871323f
                     )
                     self.stream_candidates = extract_streams_from_html(html_content, url)
                     if len(self.stream_candidates) > 0:
                         # Found streams despite 403!
                         if len(self.stream_candidates) == 1:
-<<<<<<< HEAD
                             stream_url = self.stream_candidates[0].url
                             logger.info(
                                 f"Single stream found despite 403, "
@@ -329,16 +309,6 @@ class AddFeedScreen(Screen):
                             logger.info(
                                 f"Found {len(self.stream_candidates)} streams "
                                 "despite 403, showing selection"
-=======
-                            logger.info(
-                                f"Single stream found despite 403, auto-selecting: {self.stream_candidates[0].url}"
-                            )
-                            self._save_direct_stream_feed(self.stream_candidates[0].url)
-                            return
-                        else:
-                            logger.info(
-                                f"Found {len(self.stream_candidates)} streams despite 403, showing selection"
->>>>>>> 648d97dbbc44e1d48c563b18e2efe2512871323f
                             )
                             self.current_state = "stream_selection"
                             self._update_display()
