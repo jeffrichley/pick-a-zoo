@@ -1,5 +1,7 @@
 """View Saved Cams screen for displaying and navigating saved camera feeds."""
 
+import subprocess
+import sys
 from urllib.parse import urlparse
 
 from loguru import logger
@@ -10,6 +12,7 @@ from textual.widgets import ListItem, ListView, Static
 
 from pick_a_zoo.core.feed_manager import load_feeds
 from pick_a_zoo.core.models import Feed
+from pick_a_zoo.core.video_player import DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_WIDTH
 
 
 def _is_valid_url(url: str) -> bool:
@@ -305,8 +308,37 @@ class ViewSavedCamsScreen(Screen):
                 if 0 <= feed_index < len(self._feeds):
                     feed = self._feeds[feed_index]
                     logger.info(f"Feed selected: {feed.name} ({feed.url})")
-                    # Placeholder for Story 4: transition to watch action
-                    # TODO: Push WatchCamScreen(feed) when Story 4 is implemented
-                    logger.debug("Feed selection - watch action not yet implemented (Story 4)")
+                    # Launch video window for selected feed as separate process
+                    try:
+                        # Get window dimensions from feed or use defaults
+                        width = DEFAULT_WINDOW_WIDTH
+                        height = DEFAULT_WINDOW_HEIGHT
+                        if feed.window_size:
+                            width = feed.window_size.width
+                            height = feed.window_size.height
+
+                        # Launch video window in separate process to avoid TUI conflicts
+                        # This prevents Qt warnings and ANSI escape codes from corrupting the TUI
+                        subprocess.Popen(
+                            [
+                                sys.executable,
+                                "-m",
+                                "pick_a_zoo.gui.player_launcher",
+                                feed.name,
+                                str(feed.url),
+                                str(width),
+                                str(height),
+                            ],
+                            # Redirect stdout/stderr to prevent Qt output from corrupting TUI
+                            stdout=subprocess.DEVNULL,
+                            stderr=subprocess.DEVNULL,
+                        )
+
+                        logger.info(
+                            f"Video window launched for feed: {feed.name} (separate process)"
+                        )
+                    except Exception as e:
+                        logger.error(f"Failed to launch video window: {e}", exc_info=True)
+                        self._show_error(f"Failed to launch video window: {str(e)}")
             except (ValueError, IndexError) as e:
                 logger.warning(f"Invalid feed index: {selected_item.id}: {e}")
