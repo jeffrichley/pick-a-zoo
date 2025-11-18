@@ -314,4 +314,3 @@ With multiple developers:
 - Default window dimensions: 1280x720
 - All video windows run in same process, managed by single QApplication in separate thread
 - TUI tracks all open windows and closes them on exit (FR-004b)
-

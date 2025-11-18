@@ -257,6 +257,7 @@ class VideoWindow:
                     if hasattr(original_img, "to_bytearray"):
                         try:
                             import numpy as np
+
                             # to_bytearray() might return a list, tuple, or bytes directly
                             byte_result = original_img.to_bytearray()
                             logger.debug(f"to_bytearray() returned type: {type(byte_result)}")
@@ -332,9 +333,9 @@ class VideoWindow:
                             )
 
                             if actual_bytes >= expected_bytes:
-                                img = np.frombuffer(
-                                    byte_data, dtype=np.uint8
-                                ).reshape((frame.height, frame.width, 3))
+                                img = np.frombuffer(byte_data, dtype=np.uint8).reshape(
+                                    (frame.height, frame.width, 3)
+                                )
                                 logger.debug(
                                     f"Converted Image to numpy array using to_bytearray(), "
                                     f"shape: {img.shape}"
@@ -349,7 +350,7 @@ class VideoWindow:
                             logger.warning(f"to_bytearray() failed: {e}", exc_info=True)
                             return
                     else:
-                        available_methods = [m for m in dir(original_img) if not m.startswith('_')]
+                        available_methods = [m for m in dir(original_img) if not m.startswith("_")]
                         methods_preview = available_methods[:15]
                         logger.warning(
                             f"ffpyplayer Image has no to_bytearray() method. "
@@ -389,7 +390,7 @@ class VideoWindow:
                 if len(img.shape) == 3:
                     bytes_per_line = width * 3
                     # Ensure we have contiguous array for QImage
-                    if not img.flags['C_CONTIGUOUS']:
+                    if not img.flags["C_CONTIGUOUS"]:
                         img = np.ascontiguousarray(img)
 
                     # Convert numpy array to bytes for QImage
@@ -424,12 +425,10 @@ class VideoWindow:
                         logger.info("First frame displayed successfully")
                         self._first_frame_shown = True
                 else:
-                    logger.warning(
-                        f"Unexpected image shape: {img.shape}, expected 3 dimensions"
-                    )
+                    logger.warning(f"Unexpected image shape: {img.shape}, expected 3 dimensions")
             else:
                 img_type = type(img)
-                attrs = dir(img)[:10] if hasattr(img, '__dict__') else 'N/A'
+                attrs = dir(img)[:10] if hasattr(img, "__dict__") else "N/A"
                 logger.warning(
                     f"Frame pixels object has no 'shape' attribute: {img_type}. "
                     f"Attributes: {attrs}"
@@ -540,4 +539,3 @@ class VideoWindow:
         )
         self.error_label.show()
         self.video_label.hide()
-

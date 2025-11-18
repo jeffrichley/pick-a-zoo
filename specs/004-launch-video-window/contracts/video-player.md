@@ -215,16 +215,16 @@ player = VideoPlayer("https://example.org/stream.m3u8")
 try:
     # Load stream
     player.load()
-    
+
     # Start playback
     player.play()
-    
+
     # Display frames (in GUI event loop)
     while player.is_playing():
         frame = player.get_frame()
         if frame:
             display_frame(frame)
-    
+
 except StreamLoadError as e:
     # Handle load error
     show_error(f"Failed to load stream: {e.message}")
@@ -246,4 +246,3 @@ The video player library is independently testable:
 - `ffpyplayer`: Video playback engine
 - `loguru`: Structured logging
 - Standard library: No external dependencies beyond ffpyplayer
-

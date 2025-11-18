@@ -188,4 +188,3 @@ feeds:
 - Window dimensions persist across application restarts
 - Invalid dimensions are automatically corrected to defaults
 - Configuration file writes are atomic to prevent corruption
-

@@ -1,7 +1,7 @@
 # Research: Launch Video Window for Selected Cam
 
-**Feature**: 004-launch-video-window  
-**Date**: 2024-12-19  
+**Feature**: 004-launch-video-window
+**Date**: 2024-12-19
 **Phase**: 0 - Research & Technology Decisions
 
 ## Research Questions
@@ -160,4 +160,3 @@ Proceed to Phase 1: Design & Contracts
 - Create contracts for video player library interface
 - Create contracts for video window GUI interface
 - Create quickstart.md with implementation guidance
-

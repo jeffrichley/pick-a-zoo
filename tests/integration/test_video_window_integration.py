@@ -29,4 +29,3 @@ def test_video_window_launching_from_tui():
     )
     # Should exit with non-zero (stream unavailable) but not crash
     assert result.returncode != 0  # Expected: stream unavailable, not a crash
-

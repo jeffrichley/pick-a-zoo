@@ -245,4 +245,3 @@ Video window GUI components can be tested:
 - `pick_a_zoo.core.feed_manager`: Configuration file updates
 - `loguru`: Structured logging
 - `threading`: Thread management for GUI event loop (standard library)
-

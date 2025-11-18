@@ -275,7 +275,7 @@ class VideoPlayer:
 
             if img_type_name == "Image" or "ffpyplayer" in img_type_str:
                 # Log available methods for debugging
-                available_methods = [m for m in dir(img) if not m.startswith('_')]
+                available_methods = [m for m in dir(img) if not m.startswith("_")]
                 methods_preview = available_methods[:20]
                 logger.info(f"ffpyplayer Image detected! Available methods: {methods_preview}")
 
@@ -301,6 +301,7 @@ class VideoPlayer:
                     if hasattr(img, "to_bytearray"):
                         try:
                             import numpy as np
+
                             # to_bytearray() might return a list, tuple, or bytes directly
                             byte_result = img.to_bytearray()
                             result_type = type(byte_result)
@@ -368,7 +369,7 @@ class VideoPlayer:
 
                             byte_data_type = type(byte_data)
                             byte_data_len = (
-                                len(byte_data) if hasattr(byte_data, '__len__') else 'N/A'
+                                len(byte_data) if hasattr(byte_data, "__len__") else "N/A"
                             )
                             logger.debug(
                                 f"Final byte_data type: {byte_data_type}, length: {byte_data_len}"
@@ -436,7 +437,6 @@ class VideoPlayer:
                         )
                         return None
 
-
             # Extract dimensions from image
             # ffpyplayer image format varies, but typically has shape attribute
             if hasattr(pixel_data, "shape"):
@@ -465,6 +465,7 @@ class VideoPlayer:
                 # Try pixel_data only if it's not a numpy array (which we already checked)
                 # Use type check to exclude numpy arrays
                 import numpy as np
+
                 if (
                     not isinstance(pixel_data, tuple)
                     and not isinstance(pixel_data, np.ndarray)
@@ -513,4 +514,3 @@ class VideoPlayer:
             - Error cleared when new operation succeeds
         """
         return self._error
-

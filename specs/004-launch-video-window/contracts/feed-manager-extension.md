@@ -168,9 +168,9 @@ if feed:
     # Launch window with saved dimensions or defaults
     width = feed.window_size.width if feed.window_size else 1280
     height = feed.window_size.height if feed.window_size else 720
-    
+
     # Launch video window...
-    
+
     # When window closes, save new dimensions
     if validate_window_size(new_width, new_height):
         update_feed_window_size("Panda Cam", new_width, new_height)
@@ -197,4 +197,3 @@ All new methods are additive - existing `feed_manager` functionality remains unc
 - `load_feeds()` still works as before
 - `save_feeds()` still works as before
 - New methods extend functionality without breaking changes
-

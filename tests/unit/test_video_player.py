@@ -1,6 +1,5 @@
 """Unit tests for video_player module."""
 
-
 import pytest
 
 from pick_a_zoo.core.video_player import (
@@ -129,4 +128,3 @@ def test_stream_load_error():
     assert error.message == "Stream unavailable"
     assert error.error_type == "unavailable"
     assert isinstance(error, VideoPlayerError)
-
