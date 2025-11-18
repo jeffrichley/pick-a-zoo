@@ -11,7 +11,7 @@ from pathlib import Path
 import yaml
 from loguru import logger
 
-from pick_a_zoo.core.models import Feed
+from pick_a_zoo.core.models import Feed, WindowSize
 
 
 def get_config_path() -> Path:
@@ -244,3 +244,139 @@ def _create_empty_config_file(config_path: Path) -> None:
     except (PermissionError, OSError) as e:
         logger.error(f"Failed to create empty config file: {e}")
         raise
+
+
+class FeedNotFoundError(Exception):
+    """Raised when a feed with the specified name is not found."""
+
+    def __init__(self, feed_name: str) -> None:
+        """Initialize the exception.
+
+        Args:
+            feed_name: Name of the feed that was not found.
+        """
+        self.feed_name = feed_name
+        self.message = f"Feed '{feed_name}' not found"
+        super().__init__(self.message)
+
+
+def validate_window_size(width: int, height: int) -> bool:
+    """Validate window dimensions against bounds.
+
+    Args:
+        width: Window width in pixels
+        height: Window height in pixels
+
+    Returns:
+        True if dimensions are valid, False otherwise
+
+    Behavior:
+        - Checks width is between 320 and 7680 (inclusive)
+        - Checks height is between 240 and 4320 (inclusive)
+        - Returns True if both valid, False otherwise
+    """
+    return 320 <= width <= 7680 and 240 <= height <= 4320
+
+
+def get_validated_window_size(width: int, height: int) -> "WindowSize":
+    """Get a validated WindowSize object or raise error.
+
+    Args:
+        width: Window width in pixels
+        height: Window height in pixels
+
+    Returns:
+        WindowSize object with validated dimensions
+
+    Raises:
+        ValueError: If width or height outside valid bounds
+
+    Behavior:
+        - Validates dimensions against bounds (320x240 to 7680x4320)
+        - Returns WindowSize object if valid
+        - Raises ValueError if invalid
+    """
+    if not validate_window_size(width, height):
+        raise ValueError(
+            f"Invalid window dimensions: {width}x{height}. "
+            "Width must be 320-7680, height must be 240-4320."
+        )
+    from pick_a_zoo.core.models import WindowSize
+
+    return WindowSize(width=width, height=height)
+
+
+def get_feed_by_name(feed_name: str) -> Feed | None:
+    """Get a feed by name from the configuration file.
+
+    Args:
+        feed_name: Name of the feed to retrieve
+
+    Returns:
+        Feed object if found, None if not found
+
+    Behavior:
+        - Loads feeds from configuration file
+        - Searches for feed with matching name (case-sensitive)
+        - Returns Feed object if found
+        - Returns None if not found
+
+    Raises:
+        PermissionError: If configuration file cannot be read due to permissions
+        OSError: If file system error occurs
+    """
+    feeds = load_feeds()
+    for feed in feeds:
+        if feed.name == feed_name:
+            logger.debug(f"Found feed '{feed_name}'")
+            return feed
+    logger.debug(f"Feed '{feed_name}' not found")
+    return None
+
+
+def update_feed_window_size(feed_name: str, width: int, height: int) -> None:
+    """Update the window size for a specific feed in the configuration file.
+
+    Args:
+        feed_name: Name of the feed to update
+        width: New window width in pixels (must be 320-7680)
+        height: New window height in pixels (must be 240-4320)
+
+    Returns:
+        None
+
+    Behavior:
+        - Loads current feeds from configuration file
+        - Finds feed with matching name
+        - Validates width and height against bounds (320x240 to 7680x4320)
+        - Updates feed's window_size field
+        - Saves updated feeds to configuration file atomically
+        - If feed not found, raises FeedNotFoundError
+        - If dimensions invalid, raises ValueError
+
+    Raises:
+        FeedNotFoundError: If feed with given name doesn't exist
+        ValueError: If width or height outside valid bounds
+        PermissionError: If configuration file cannot be read or written due to permissions
+        OSError: If file system error occurs
+    """
+    # Validate dimensions first
+    validated_size = get_validated_window_size(width, height)
+
+    # Load current feeds
+    feeds = load_feeds()
+
+    # Find feed and update
+    feed_found = False
+    for feed in feeds:
+        if feed.name == feed_name:
+            feed.window_size = validated_size
+            feed_found = True
+            logger.info(f"Updated window size for feed '{feed_name}' to {width}x{height}")
+            break
+
+    if not feed_found:
+        raise FeedNotFoundError(feed_name)
+
+    # Save updated feeds
+    save_feeds(feeds)
