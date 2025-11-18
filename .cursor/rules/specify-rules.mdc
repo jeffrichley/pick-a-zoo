@@ -3,6 +3,8 @@
 Auto-generated from all feature plans. Last updated: 2025-11-18
 
 ## Active Technologies
+- Python 3.12 + textual (TUI framework), rich (rendering engine), PyYAML (configuration file handling), pydantic (data model validation), platformdirs (cross-platform config paths), loguru (structured logging) (003-view-saved-cams)
+- YAML configuration file (feeds.yaml) stored in platform-appropriate user data directory via platformdirs (read-only in this feature) (003-view-saved-cams)
 
 - Python 3.12 + httpx (HTTP client), beautifulsoup4 (HTML parsing), lxml (HTML parser backend), m3u8 (HLS playlist parsing), PyYAML (configuration file handling), pydantic (data model validation), textual (TUI framework), rich (rendering engine), platformdirs (cross-platform config paths), loguru (structured logging) (002-add-cam-feed)
 
@@ -22,6 +24,7 @@ cd src; pytest; ruff check .
 Python 3.12: Follow standard conventions
 
 ## Recent Changes
+- 003-view-saved-cams: Added Python 3.12 + textual (TUI framework), rich (rendering engine), PyYAML (configuration file handling), pydantic (data model validation), platformdirs (cross-platform config paths), loguru (structured logging)
 
 - 002-add-cam-feed: Added Python 3.12 + httpx (HTTP client), beautifulsoup4 (HTML parsing), lxml (HTML parser backend), m3u8 (HLS playlist parsing), PyYAML (configuration file handling), pydantic (data model validation), textual (TUI framework), rich (rendering engine), platformdirs (cross-platform config paths), loguru (structured logging)
 

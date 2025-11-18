@@ -9,6 +9,7 @@ from textual.widgets import Label, ListItem, ListView, Static
 
 from pick_a_zoo.core.feed_manager import load_feeds
 from pick_a_zoo.tui.screens.add_feed import AddFeedScreen
+from pick_a_zoo.tui.screens.view_saved_cams import ViewSavedCamsScreen
 
 
 class MainMenuScreen(Screen):
@@ -113,8 +114,8 @@ class MainMenuScreen(Screen):
         if option == "quit":
             self.action_quit()
         elif option == "view":
-            logger.info("View Saved Cams selected (not yet implemented)")
-            # Future: push ViewSavedCamsScreen()
+            logger.info("View Saved Cams selected")
+            self.app.push_screen(ViewSavedCamsScreen())
         elif option == "add":
             logger.info("Add a New Cam selected")
             self.app.push_screen(AddFeedScreen())
