@@ -300,8 +300,7 @@ class AddFeedScreen(Screen):
                         if len(self.stream_candidates) == 1:
                             stream_url = self.stream_candidates[0].url
                             logger.info(
-                                f"Single stream found despite 403, "
-                                f"auto-selecting: {stream_url}"
+                                f"Single stream found despite 403, " f"auto-selecting: {stream_url}"
                             )
                             self._save_direct_stream_feed(stream_url)
                             return

@@ -15,6 +15,7 @@ from pydantic import BaseModel, Field
 try:
     from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
     from playwright.sync_api import sync_playwright
+
     PLAYWRIGHT_AVAILABLE = True
 except ImportError:
     PLAYWRIGHT_AVAILABLE = False
@@ -151,10 +152,7 @@ class StreamCandidate(BaseModel):
 
     url: str = Field(description="Extracted stream URL")
     source_type: str = Field(
-        description=(
-            "How it was found (e.g., 'video_tag', 'source_tag', "
-            "'m3u8_link', 'iframe')"
-        )
+        description=("How it was found (e.g., 'video_tag', 'source_tag', " "'m3u8_link', 'iframe')")
     )
 
 
@@ -162,9 +160,7 @@ class URLValidationResult(BaseModel):
     """Represents the result of validating a URL's accessibility."""
 
     is_accessible: bool = Field(description="Whether URL is accessible")
-    status_code: int | None = Field(
-        default=None, description="HTTP status code if available"
-    )
+    status_code: int | None = Field(default=None, description="HTTP status code if available")
     error_message: str | None = Field(
         default=None, description="Error message if validation failed"
     )
@@ -461,8 +457,7 @@ def validate_url_accessibility(url: str, timeout: float = 15.0) -> URLValidation
                     is_accessible=False,
                     status_code=response.status_code,
                     error_message=(
-                        f"URL exceeded maximum redirect limit (5): "
-                        f"{redirect_count} redirects"
+                        f"URL exceeded maximum redirect limit (5): " f"{redirect_count} redirects"
                     ),
                     content_type=response.headers.get("Content-Type"),
                 )
