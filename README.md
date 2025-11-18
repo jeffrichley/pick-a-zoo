@@ -116,4 +116,3 @@ uv run mypy src
 ## License
 
 [Add your license here]
-

@@ -1,7 +1,7 @@
 # Quickstart: Launch the Pick-a-Zoo TUI
 
-**Feature**: Launch the Pick-a-Zoo TUI  
-**Date**: 2024-12-19  
+**Feature**: Launch the Pick-a-Zoo TUI
+**Date**: 2024-12-19
 **Phase**: 1 - Design & Contracts
 
 ## Overview
@@ -229,4 +229,3 @@ After implementing Story 1:
 - [Rich Documentation](https://rich.readthedocs.io/)
 - [PyYAML Documentation](https://pyyaml.org/)
 - [Platformdirs Documentation](https://platformdirs.readthedocs.io/)
-

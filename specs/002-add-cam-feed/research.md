@@ -1,7 +1,7 @@
 # Research: Add a New Live Cam Feed
 
-**Feature**: 002-add-cam-feed  
-**Date**: 2024-12-19  
+**Feature**: 002-add-cam-feed
+**Date**: 2024-12-19
 **Phase**: 0 - Outline & Research
 
 ## Research Tasks & Findings
@@ -12,7 +12,7 @@
 
 **Decision**: Use URL extension/pattern matching for direct streams, HTTP HEAD/GET request for HTML detection.
 
-**Rationale**: 
+**Rationale**:
 - Direct stream URLs typically have recognizable extensions (.m3u8, .mp4, .webm) or protocols (rtsp://)
 - HTTP HEAD request can check Content-Type header to distinguish HTML pages from media streams
 - Pattern matching is fast and reliable for common stream formats
@@ -188,4 +188,3 @@
 - BeautifulSoup4 documentation: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
 - Textual documentation: https://textual.textualize.io/
 - m3u8 library: https://github.com/globocom/m3u8
-

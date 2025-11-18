@@ -1,9 +1,8 @@
 """Unit tests for AddFeedScreen."""
 
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 import pytest
-from textual.screen import Screen
 
 from pick_a_zoo.tui.screens.add_feed import AddFeedScreen
 
@@ -43,9 +42,7 @@ def test_add_feed_screen_direct_stream_workflow_success_case(
     from pick_a_zoo.core.feed_discovery import URLType, URLValidationResult
 
     mock_detect_url_type.return_value = URLType.DIRECT_STREAM
-    mock_validate_url.return_value = URLValidationResult(
-        is_accessible=True, status_code=200
-    )
+    mock_validate_url.return_value = URLValidationResult(is_accessible=True, status_code=200)
     mock_load_feeds.return_value = []
     mock_resolve_duplicate_name.return_value = "Panda Cam"
 
@@ -71,7 +68,7 @@ def test_add_feed_screen_invalid_url_error_handling(mock_detect_url_type):
 @patch("pick_a_zoo.tui.screens.add_feed.validate_url_accessibility")
 def test_add_feed_screen_inaccessible_url_error_handling(mock_validate_url):
     """Test AddFeedScreen inaccessible URL error handling."""
-    from pick_a_zoo.core.feed_discovery import URLValidationResult, URLValidationError
+    from pick_a_zoo.core.feed_discovery import URLValidationError
 
     mock_validate_url.side_effect = URLValidationError("URL not accessible")
 
@@ -94,4 +91,3 @@ def test_add_feed_screen_cancellation_at_url_entry():
     screen = AddFeedScreen()
     # Test that cancellation returns to main menu
     assert hasattr(screen, "on_cancel") or hasattr(screen, "action_cancel")
-

@@ -13,7 +13,6 @@ from pick_a_zoo.core.feed_discovery import (
     HTMLParseError,
     URLType,
     URLValidationError,
-    URLValidationResult,
     detect_url_type,
     extract_streams_from_html,
     validate_url_accessibility,
@@ -185,8 +184,7 @@ class AddFeedScreen(Screen):
             logger.error(f"Unexpected error: {e}", exc_info=True)
             self.current_state = "error"
             self.error_message = (
-                f"An unexpected error occurred: {e}. "
-                "Please try again or press 'q' to cancel."
+                f"An unexpected error occurred: {e}. " "Please try again or press 'q' to cancel."
             )
             self._update_display()
 
@@ -198,7 +196,7 @@ class AddFeedScreen(Screen):
         try:
             # Fetch HTML content with browser-like headers to avoid bot detection
             from pick_a_zoo.core.feed_discovery import _get_browser_headers
-            
+
             headers = _get_browser_headers(url)
             with httpx.Client(timeout=30.0, follow_redirects=True, headers=headers) as client:
                 response = client.get(url)
@@ -239,23 +237,27 @@ class AddFeedScreen(Screen):
             if e.response.status_code == 403:
                 try:
                     from pick_a_zoo.core.feed_discovery import fetch_html_with_playwright
-                    
+
                     status_widget.update("Access denied. Trying with browser automation...")
                     logger.info("403 error detected, attempting Playwright fallback")
                     html_content = fetch_html_with_playwright(url, timeout=30.0)
-                    
+
                     # Extract streams from Playwright-fetched HTML
                     status_widget.update("Extracting streams from page...")
                     self.stream_candidates = extract_streams_from_html(html_content, url)
-                    
+
                     if len(self.stream_candidates) > 0:
                         # Found streams with Playwright!
                         if len(self.stream_candidates) == 1:
-                            logger.info(f"Single stream found with Playwright, auto-selecting: {self.stream_candidates[0].url}")
+                            logger.info(
+                                f"Single stream found with Playwright, auto-selecting: {self.stream_candidates[0].url}"
+                            )
                             self._save_direct_stream_feed(self.stream_candidates[0].url)
                             return
                         else:
-                            logger.info(f"Found {len(self.stream_candidates)} streams with Playwright, showing selection")
+                            logger.info(
+                                f"Found {len(self.stream_candidates)} streams with Playwright, showing selection"
+                            )
                             self.current_state = "stream_selection"
                             self._update_display()
                             stream_list = self.query_one("#stream-list", ListView)
@@ -271,25 +273,31 @@ class AddFeedScreen(Screen):
                         )
                         self._update_display()
                         return
-                        
+
                 except Exception as playwright_error:
                     logger.warning(f"Playwright fallback failed: {playwright_error}")
                     # Fall through to error message below
-            
+
             # Try to extract streams from error page HTML anyway (some sites return HTML even on 403)
             if e.response.status_code == 403:
                 try:
                     html_content = e.response.text
-                    logger.info(f"Attempting stream extraction from 403 response ({len(html_content)} bytes)")
+                    logger.info(
+                        f"Attempting stream extraction from 403 response ({len(html_content)} bytes)"
+                    )
                     self.stream_candidates = extract_streams_from_html(html_content, url)
                     if len(self.stream_candidates) > 0:
                         # Found streams despite 403!
                         if len(self.stream_candidates) == 1:
-                            logger.info(f"Single stream found despite 403, auto-selecting: {self.stream_candidates[0].url}")
+                            logger.info(
+                                f"Single stream found despite 403, auto-selecting: {self.stream_candidates[0].url}"
+                            )
                             self._save_direct_stream_feed(self.stream_candidates[0].url)
                             return
                         else:
-                            logger.info(f"Found {len(self.stream_candidates)} streams despite 403, showing selection")
+                            logger.info(
+                                f"Found {len(self.stream_candidates)} streams despite 403, showing selection"
+                            )
                             self.current_state = "stream_selection"
                             self._update_display()
                             stream_list = self.query_one("#stream-list", ListView)
@@ -297,7 +305,7 @@ class AddFeedScreen(Screen):
                             return
                 except Exception as parse_error:
                     logger.warning(f"Failed to parse 403 response: {parse_error}")
-            
+
             # No streams found or parsing failed
             self.current_state = "error"
             if e.response.status_code == 403:
@@ -341,8 +349,7 @@ class AddFeedScreen(Screen):
             logger.error(f"Unexpected error handling HTML page: {e}", exc_info=True)
             self.current_state = "error"
             self.error_message = (
-                f"An unexpected error occurred: {e}. "
-                "Please try again or press 'q' to cancel."
+                f"An unexpected error occurred: {e}. " "Please try again or press 'q' to cancel."
             )
             self._update_display()
 
@@ -374,8 +381,7 @@ class AddFeedScreen(Screen):
             logger.error(f"Error saving feed: {e}", exc_info=True)
             self.current_state = "error"
             self.error_message = (
-                f"Error saving feed: {e}. "
-                "Please try again or press 'q' to cancel."
+                f"Error saving feed: {e}. " "Please try again or press 'q' to cancel."
             )
             self._update_display()
 
@@ -395,4 +401,3 @@ class AddFeedScreen(Screen):
         """Handle cancellation - return to main menu."""
         logger.info("AddFeedScreen cancelled")
         self.app.pop_screen()
-

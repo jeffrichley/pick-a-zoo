@@ -50,4 +50,3 @@ def test_corrupted_config_file_recovery(mock_load_feeds):
 
     feeds = load_feeds()
     assert feeds == []
-

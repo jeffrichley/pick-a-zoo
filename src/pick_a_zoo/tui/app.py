@@ -20,4 +20,3 @@ class PickAZooApp(App):
     async def action_quit(self) -> None:
         """Quit the application."""
         self.exit()
-

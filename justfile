@@ -26,4 +26,3 @@ type-check:
 # Run all checks (lint, type-check, test)
 check: lint type-check test
     @echo "All checks passed!"
-

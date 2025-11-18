@@ -11,14 +11,14 @@ Enable users to add new live camera feeds by providing a name and URL. The syste
 
 ## Technical Context
 
-**Language/Version**: Python 3.12  
-**Primary Dependencies**: httpx (HTTP client), beautifulsoup4 (HTML parsing), lxml (HTML parser backend), m3u8 (HLS playlist parsing), PyYAML (configuration file handling), pydantic (data model validation), textual (TUI framework), rich (rendering engine), platformdirs (cross-platform config paths), loguru (structured logging)  
-**Storage**: YAML configuration file (feeds.yaml) stored in platform-appropriate user data directory via platformdirs  
-**Testing**: pytest (unit tests), textual snapshot testing for TUI screens  
-**Target Platform**: Cross-platform terminal (Linux, macOS, Windows) supporting ANSI color codes  
-**Project Type**: single (CLI application)  
-**Performance Goals**: Direct stream feed addition completes in under 30 seconds (SC-001), HTML page feed addition completes in under 60 seconds (SC-003), URL validation timeout 10-30 seconds  
-**Constraints**: Must handle network errors gracefully, support cancellation at any point, handle duplicate feed names automatically, validate URLs immediately after entry  
+**Language/Version**: Python 3.12
+**Primary Dependencies**: httpx (HTTP client), beautifulsoup4 (HTML parsing), lxml (HTML parser backend), m3u8 (HLS playlist parsing), PyYAML (configuration file handling), pydantic (data model validation), textual (TUI framework), rich (rendering engine), platformdirs (cross-platform config paths), loguru (structured logging)
+**Storage**: YAML configuration file (feeds.yaml) stored in platform-appropriate user data directory via platformdirs
+**Testing**: pytest (unit tests), textual snapshot testing for TUI screens
+**Target Platform**: Cross-platform terminal (Linux, macOS, Windows) supporting ANSI color codes
+**Project Type**: single (CLI application)
+**Performance Goals**: Direct stream feed addition completes in under 30 seconds (SC-001), HTML page feed addition completes in under 60 seconds (SC-003), URL validation timeout 10-30 seconds
+**Constraints**: Must handle network errors gracefully, support cancellation at any point, handle duplicate feed names automatically, validate URLs immediately after entry
 **Scale/Scope**: Single-user desktop application, unlimited feed entries, HTML pages up to reasonable parsing size
 
 ## Constitution Check

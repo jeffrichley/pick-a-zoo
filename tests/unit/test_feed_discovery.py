@@ -6,13 +6,10 @@ import httpx
 import pytest
 
 from pick_a_zoo.core.feed_discovery import (
-    HTMLParseError,
-    StreamCandidate,
     URLType,
     URLValidationError,
     URLValidationResult,
     detect_url_type,
-    extract_streams_from_html,
     validate_url_accessibility,
 )
 
@@ -205,4 +202,3 @@ def test_validate_url_accessibility_with_redirect_handling(mock_client_class):
     result = validate_url_accessibility(url)
     assert result.is_accessible is True
     assert result.status_code == 200
-

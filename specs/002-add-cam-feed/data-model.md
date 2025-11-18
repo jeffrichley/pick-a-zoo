@@ -1,7 +1,7 @@
 # Data Model: Add a New Live Cam Feed
 
-**Feature**: 002-add-cam-feed  
-**Date**: 2024-12-19  
+**Feature**: 002-add-cam-feed
+**Date**: 2024-12-19
 **Phase**: 1 - Design & Contracts
 
 ## Validation Guidelines
@@ -33,7 +33,7 @@
 
 **State Transitions**: None (immutable data structure)
 
-**Relationships**: 
+**Relationships**:
 - Contained in `FeedsConfigurationFile.feeds` list
 - Referenced by `FeedDiscoveryResult` when extracted from HTML
 
@@ -156,7 +156,7 @@ Resolves duplicate feed names by appending number suffix.
 
 **Input**: Proposed name, list of existing feeds
 **Output**: Resolved unique name (e.g., "Panda Cam (2)")
-**Logic**: 
+**Logic**:
 - If name is unique, return as-is
 - If duplicate, append " (2)", " (3)", etc. until unique
 
@@ -196,4 +196,3 @@ Raised when URL validation fails (timeout, connection error, etc.)
 Raised when HTML parsing fails (malformed HTML, encoding issues, etc.)
 
 All errors include user-friendly messages and context for logging.
-

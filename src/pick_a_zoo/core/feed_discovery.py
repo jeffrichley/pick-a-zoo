@@ -3,8 +3,8 @@
 This module follows the library-first architecture principle and is independently testable.
 """
 
-from enum import Enum
 import re
+from enum import Enum
 from urllib.parse import urljoin, urlparse
 
 import httpx
@@ -13,7 +13,9 @@ from loguru import logger
 from pydantic import BaseModel, Field
 
 try:
-    from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
+    from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+    from playwright.sync_api import sync_playwright
+
     PLAYWRIGHT_AVAILABLE = True
 except ImportError:
     PLAYWRIGHT_AVAILABLE = False
@@ -23,10 +25,10 @@ except ImportError:
 
 def _get_browser_headers(url: str | None = None) -> dict[str, str]:
     """Get browser-like HTTP headers to avoid bot detection.
-    
+
     Args:
         url: Optional URL to set Referer header based on domain
-        
+
     Returns:
         Dictionary of HTTP headers that mimic a real browser
     """
@@ -44,7 +46,7 @@ def _get_browser_headers(url: str | None = None) -> dict[str, str]:
         "Sec-Fetch-User": "?1",
         "Cache-Control": "max-age=0",
     }
-    
+
     # Set Referer if URL provided
     if url:
         try:
@@ -52,23 +54,23 @@ def _get_browser_headers(url: str | None = None) -> dict[str, str]:
             headers["Referer"] = f"{parsed.scheme}://{parsed.netloc}/"
         except Exception:
             pass  # If parsing fails, skip Referer
-    
+
     return headers
 
 
 def fetch_html_with_playwright(url: str, timeout: float = 30.0) -> str:
     """Fetch HTML content using Playwright (headless browser) to handle JavaScript-rendered content.
-    
+
     This function uses Playwright to load the page, execute JavaScript, and return the rendered HTML.
     Useful for sites with bot protection or JavaScript-rendered content.
-    
+
     Args:
         url: URL to fetch
         timeout: Timeout in seconds (default: 30.0)
-        
+
     Returns:
         HTML content string after JavaScript execution
-        
+
     Raises:
         FeedDiscoveryError: If Playwright is not available or fetch fails
     """
@@ -77,9 +79,9 @@ def fetch_html_with_playwright(url: str, timeout: float = 30.0) -> str:
             "Playwright is not installed. Install it with: playwright install",
             "Browser automation is not available. Please install Playwright or use a direct stream URL.",
         )
-    
+
     logger.info(f"Fetching HTML with Playwright: {url}")
-    
+
     try:
         with sync_playwright() as p:
             # Launch browser in headless mode
@@ -89,7 +91,7 @@ def fetch_html_with_playwright(url: str, timeout: float = 30.0) -> str:
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             )
             page = context.new_page()
-            
+
             # Navigate to URL and wait for network to be idle
             try:
                 page.goto(url, wait_until="networkidle", timeout=int(timeout * 1000))
@@ -97,18 +99,18 @@ def fetch_html_with_playwright(url: str, timeout: float = 30.0) -> str:
                 # If networkidle times out, try with domcontentloaded
                 logger.warning("Network idle timeout, trying domcontentloaded")
                 page.goto(url, wait_until="domcontentloaded", timeout=int(timeout * 1000))
-            
+
             # Wait a bit for any delayed JavaScript to execute
             page.wait_for_timeout(2000)  # 2 seconds
-            
+
             # Get the rendered HTML
             html_content = page.content()
-            
+
             browser.close()
-            
+
             logger.info(f"Successfully fetched HTML with Playwright ({len(html_content)} bytes)")
             return html_content
-            
+
     except PlaywrightTimeoutError as e:
         logger.error(f"Playwright timeout fetching {url}: {e}")
         raise FeedDiscoveryError(
@@ -134,7 +136,9 @@ class StreamCandidate(BaseModel):
     """Represents a candidate stream URL extracted from HTML."""
 
     url: str = Field(description="Extracted stream URL")
-    source_type: str = Field(description="How it was found (e.g., 'video_tag', 'source_tag', 'm3u8_link', 'iframe')")
+    source_type: str = Field(
+        description="How it was found (e.g., 'video_tag', 'source_tag', 'm3u8_link', 'iframe')"
+    )
 
 
 class URLValidationResult(BaseModel):
@@ -142,7 +146,9 @@ class URLValidationResult(BaseModel):
 
     is_accessible: bool = Field(description="Whether URL is accessible")
     status_code: int | None = Field(default=None, description="HTTP status code if available")
-    error_message: str | None = Field(default=None, description="Error message if validation failed")
+    error_message: str | None = Field(
+        default=None, description="Error message if validation failed"
+    )
     content_type: str | None = Field(default=None, description="Content-Type header if available")
 
 
@@ -345,32 +351,38 @@ def extract_streams_from_html(html_content: str, base_url: str) -> list[StreamCa
         (r"https?://[^\s\"'<>]+\.webm[^\s\"'<>]*", "webm_link"),
         (r"https?://[^\s\"'<>]+\.m3u[^\s\"'<>]*", "m3u_link"),
     ]
-    
+
     # Search in page text content
     page_text = soup.get_text()
     for pattern, source_type in stream_patterns:
         for match in re.finditer(pattern, page_text, re.IGNORECASE):
             url = match.group(0)
             # Filter out URLs that are clearly not streams (e.g., images, CSS, JS files)
-            if any(ext in url.lower() for ext in [".jpg", ".jpeg", ".png", ".gif", ".css", ".js", ".json"]):
+            if any(
+                ext in url.lower()
+                for ext in [".jpg", ".jpeg", ".png", ".gif", ".css", ".js", ".json"]
+            ):
                 continue
             if url not in seen_urls:
                 streams.append(StreamCandidate(url=url, source_type=source_type))
                 seen_urls.add(url)
                 logger.debug(f"Found {source_type} in page content: {url}")
-    
+
     # Search for stream URLs in JavaScript code within <script> tags
     for script_tag in soup.find_all("script"):
         script_content = script_tag.string if script_tag.string else ""
         if not script_content:
             # Try to get content from script tag
             script_content = str(script_tag)
-        
+
         for pattern, source_type in stream_patterns:
             for match in re.finditer(pattern, script_content, re.IGNORECASE):
                 url = match.group(0)
                 # Filter out non-stream URLs
-                if any(ext in url.lower() for ext in [".jpg", ".jpeg", ".png", ".gif", ".css", ".js", ".json"]):
+                if any(
+                    ext in url.lower()
+                    for ext in [".jpg", ".jpeg", ".png", ".gif", ".css", ".js", ".json"]
+                ):
                     continue
                 if url not in seen_urls:
                     streams.append(StreamCandidate(url=url, source_type=f"script_{source_type}"))
@@ -487,4 +499,3 @@ def validate_url_accessibility(url: str, timeout: float = 15.0) -> URLValidation
             f"Unexpected error while validating URL: {url}",
             "An unexpected error occurred. Please try again.",
         ) from e
-

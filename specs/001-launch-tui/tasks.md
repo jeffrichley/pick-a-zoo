@@ -271,4 +271,3 @@ With multiple developers:
 - Stop at checkpoint to validate story independently
 - All tasks follow strict checklist format: `- [ ] [TaskID] [P?] [Story?] Description with file path`
 - Avoid: vague tasks, same file conflicts, cross-story dependencies that break independence
-

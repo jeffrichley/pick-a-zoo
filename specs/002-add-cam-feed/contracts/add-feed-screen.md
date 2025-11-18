@@ -1,7 +1,7 @@
 # Add Feed Screen Contract
 
-**Module**: `pick_a_zoo.tui.screens.add_feed`  
-**Type**: TUI Screen Component  
+**Module**: `pick_a_zoo.tui.screens.add_feed`
+**Type**: TUI Screen Component
 **Constitution**: Library-First Architecture (Principle II) - Screen is modular and self-contained
 
 ## Overview
@@ -145,4 +145,3 @@ Unit tests must cover:
 - Error handling and retry logic
 - Cancellation at various points
 - Duplicate name resolution integration
-
