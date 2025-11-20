@@ -16,7 +16,7 @@
 
 **Option 1: imageio-ffmpeg**
 - **Decision**: ✅ **SELECTED**
-- **Rationale**: 
+- **Rationale**:
   - Lightweight wrapper around FFmpeg (which ffpyplayer already uses)
   - Simple API: `imageio.get_writer()` with fps parameter
   - Supports MP4 encoding with H.264 codec (standard, widely playable)
@@ -63,7 +63,7 @@
   - Memory buffering is faster for short recordings
   - For very long recordings, need to flush periodically to prevent memory exhaustion
   - Can use a ring buffer or chunked encoding approach
-- **Implementation Approach**: 
+- **Implementation Approach**:
   - Buffer frames in memory list (numpy arrays)
   - When buffer reaches threshold (e.g., 1000 frames or 30 seconds), encode chunk and append to file
   - Final encoding combines all chunks or uses incremental encoding
@@ -78,7 +78,7 @@
   - If source video is 30fps, encode output at 150fps
   - When played back at normal speed (30fps), it will appear 5x faster
   - Alternatively: encode at source fps but set playback speed metadata (less reliable)
-- **Implementation Approach**: 
+- **Implementation Approach**:
   - Detect source frame rate from VideoPlayer (or use default 30fps if unknown)
   - Set output fps = source_fps * 5
   - Encode all captured frames at this rate
@@ -93,7 +93,7 @@
   - Consistent with existing codebase patterns (snapshots directory)
   - Cross-platform support via platformdirs
   - Automatic directory creation ensures user doesn't need to set up directories
-- **Implementation Approach**: 
+- **Implementation Approach**:
   - Use `platformdirs.user_data_dir('pick-a-zoo')` / `timelapses`
   - Create directory if it doesn't exist on first timelapse creation
   - Handle permission errors gracefully
@@ -135,4 +135,3 @@
 ## Next Steps
 
 Proceed to Phase 1: Design & Contracts with resolved technical decisions.
-

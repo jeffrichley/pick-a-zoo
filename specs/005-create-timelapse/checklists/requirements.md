@@ -34,4 +34,3 @@
 - All checklist items pass validation
 - Specification is ready for `/speckit.clarify` or `/speckit.plan`
 - Reasonable defaults applied for recording start time (button click), duration (until stopped/closed), and save location (timelapses directory with timestamp naming)
-

@@ -9,6 +9,7 @@ import pytest
 @pytest.fixture(autouse=True)
 def mock_pyqt6():
     """Create a mock PyQt6 module structure and inject into sys.modules."""
+
     # Create mock classes that can be instantiated without spec issues
     def make_mock_class(name):
         # Use MagicMock - it will return new MagicMock instances when called
@@ -36,11 +37,14 @@ def mock_pyqt6():
     mock_pyqt6.QtCore = mock_qt_core
 
     # Inject into sys.modules so imports work
-    with patch.dict(sys.modules, {
-        "PyQt6": mock_pyqt6,
-        "PyQt6.QtWidgets": mock_qt_widgets,
-        "PyQt6.QtCore": mock_qt_core,
-    }):
+    with patch.dict(
+        sys.modules,
+        {
+            "PyQt6": mock_pyqt6,
+            "PyQt6.QtWidgets": mock_qt_widgets,
+            "PyQt6.QtCore": mock_qt_core,
+        },
+    ):
         yield mock_pyqt6
 
 

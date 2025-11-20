@@ -240,4 +240,3 @@ def test_timelapse_encoder_cancel_recording_not_recording(tmp_path: Path):
     encoder = TimelapseEncoder(output_directory=tmp_path)
     with pytest.raises(NoRecordingError):
         encoder.cancel_recording()
-

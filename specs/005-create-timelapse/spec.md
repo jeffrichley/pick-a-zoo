@@ -116,4 +116,3 @@ As a user, I want clear feedback when timelapse creation fails so I understand w
 - Timelapse recording starts from when the button is clicked (not from when playback began)
 - Timelapse recording continues until the button is clicked again to stop, or until the video window is closed
 - Timelapse videos are saved with timestamp-based filenames to ensure uniqueness (e.g., `<feed-name>-YYYYMMDD-HHMMSS.mp4`)
-

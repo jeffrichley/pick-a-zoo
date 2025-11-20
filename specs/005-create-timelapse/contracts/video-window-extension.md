@@ -55,7 +55,7 @@ Create and configure the timelapse button widget.
 ```python
 def _setup_timelapse_button(self) -> None:
     from PyQt6.QtWidgets import QPushButton
-    
+
     self.timelapse_button = QPushButton("Timelapse")
     self.timelapse_button.clicked.connect(self._on_timelapse_button_clicked)
     # Add to layout...
@@ -115,11 +115,11 @@ Start a new timelapse recording session.
 ```python
 def _start_timelapse_recording(self) -> None:
     from pick_a_zoo.core.timelapse_encoder import TimelapseEncoder
-    
+
     if not self._player or not self._player.is_playing():
         self.display_error("Cannot create timelapse: video not playing")
         return
-    
+
     try:
         self.timelapse_encoder = TimelapseEncoder()
         source_fps = self._detect_source_fps() or 30.0
@@ -159,7 +159,7 @@ Stop the current timelapse recording and save the video file.
 def _stop_timelapse_recording(self) -> None:
     if not self.timelapse_encoder:
         return
-    
+
     try:
         video_path = self.timelapse_encoder.stop_recording()
         self._show_status(f"Timelapse saved: {video_path.name}")
@@ -214,7 +214,7 @@ Extended frame update to capture frames for timelapse if recording is active.
 ```python
 def _update_frame(self) -> None:
     # ... existing frame display code ...
-    
+
     # Capture frame for timelapse if recording
     if self.is_recording_timelapse and self.timelapse_encoder:
         try:
@@ -244,7 +244,7 @@ def closeEvent(self, event: QCloseEvent | None) -> None:
     # Stop timelapse recording if active
     if self.is_recording_timelapse:
         self._stop_timelapse_recording()
-    
+
     # ... existing close event code ...
 ```
 
@@ -329,4 +329,3 @@ GUI tests should cover:
 - `pick_a_zoo.core.video_player`: Video playback library (existing)
 - `numpy`: Frame data conversion (existing)
 - `loguru`: Structured logging (existing)
-

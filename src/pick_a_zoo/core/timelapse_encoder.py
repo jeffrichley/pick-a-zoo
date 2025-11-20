@@ -406,4 +406,3 @@ class TimelapseEncoder:
                 except Exception:
                     pass
             raise EncodingError(f"Failed to encode video: {e}", error_type="codec_error") from e
-

@@ -214,4 +214,3 @@ Represents the timelapse encoding library component. This is the core library cl
 - Disk space checked before starting recording (FR-014)
 - Frame capture rate matches video playback rate (no additional overhead)
 - Encoding performance optimized for reasonable recording durations (minutes, not hours)
-

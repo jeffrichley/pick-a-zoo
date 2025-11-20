@@ -56,13 +56,13 @@ class TimelapseEncoderError(Exception):
 
 class TimelapseEncoder:
     """Main class for timelapse recording and encoding."""
-    
+
     def __init__(self, output_directory: Path | None = None) -> None:
         """Initialize encoder with output directory."""
         if output_directory is None:
             app_dir = Path(platformdirs.user_data_dir('pick-a-zoo'))
             output_directory = app_dir / 'timelapses'
-        
+
         output_directory.mkdir(parents=True, exist_ok=True)
         self.output_directory = output_directory
         self._frames: list[np.ndarray] = []
@@ -70,82 +70,82 @@ class TimelapseEncoder:
         self._feed_name = ""
         self._source_fps = 30.0
         self._output_fps = 150.0  # 5x speed
-    
+
     def start_recording(self, feed_name: str, source_fps: float = 30.0) -> None:
         """Start a new timelapse recording."""
         if self._is_recording:
             raise RuntimeError("Recording already in progress")
-        
+
         if not feed_name:
             raise ValueError("feed_name must be non-empty")
-        
+
         # Check disk space (simplified - implement proper check)
         # ... disk space check ...
-        
+
         self._feed_name = feed_name
         self._source_fps = source_fps
         self._output_fps = source_fps * 5.0
         self._frames = []
         self._is_recording = True
         logger.info(f"Started timelapse recording: {feed_name} at {source_fps}fps")
-    
+
     def capture_frame(self, frame: np.ndarray) -> None:
         """Capture a frame for timelapse."""
         if not self._is_recording:
             raise RuntimeError("No recording in progress")
-        
+
         # Validate frame shape
         if len(frame.shape) != 3 or frame.shape[2] != 3:
             raise ValueError("Frame must be RGB array with shape (height, width, 3)")
-        
+
         self._frames.append(frame.copy())
-    
+
     def stop_recording(self) -> Path:
         """Stop recording and encode video."""
         if not self._is_recording:
             raise RuntimeError("No recording in progress")
-        
+
         if len(self._frames) == 0:
             raise ValueError("No frames captured")
-        
+
         # Generate filename
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
         sanitized_name = self._feed_name.replace(" ", "-").replace("/", "-")
         filename = f"{sanitized_name}-{timestamp}.mp4"
         output_path = self.output_directory / filename
-        
+
         # Encode video
         try:
             self._encode_video(output_path)
         except Exception as e:
             logger.error(f"Encoding failed: {e}")
             raise
-        
+
         # Cleanup
         self._frames = []
         self._is_recording = False
-        
+
         logger.info(f"Timelapse saved: {output_path}")
         return output_path
-    
+
     def _encode_video(self, output_path: Path) -> None:
         """Encode frames into MP4 video at 5x speed."""
         if imageio is None or imageio_ffmpeg is None:
             raise ImportError("imageio-ffmpeg not available")
-        
+
         writer = imageio.get_writer(
             str(output_path),
             fps=self._output_fps,
             codec='libx264',
             format='mp4'
         )
-        
+
         try:
             for frame in self._frames:
                 writer.append_data(frame)
         finally:
             writer.close()
-    
+
     def is_recording(self) -> bool:
         """Check if recording is active."""
         return self._is_recording
@@ -161,35 +161,35 @@ from pick_a_zoo.core.timelapse_encoder import TimelapseEncoder
 class VideoWindow:
     def __init__(self, feed_name: str, stream_url: str, width: int = 1280, height: int = 720):
         # ... existing initialization ...
-        
+
         # Timelapse recording state
         self.timelapse_encoder: TimelapseEncoder | None = None
         self.is_recording_timelapse = False
-        
+
         # Create timelapse button
         self._setup_timelapse_button()
-    
+
     def _setup_timelapse_button(self) -> None:
         """Create and configure timelapse button."""
         from PyQt6.QtWidgets import QPushButton
-        
+
         self.timelapse_button = QPushButton("Start Timelapse")
         self.timelapse_button.clicked.connect(self._on_timelapse_button_clicked)
         # Add to layout (toolbar or overlay)
-    
+
     def _on_timelapse_button_clicked(self) -> None:
         """Handle timelapse button click."""
         if self.is_recording_timelapse:
             self._stop_timelapse_recording()
         else:
             self._start_timelapse_recording()
-    
+
     def _start_timelapse_recording(self) -> None:
         """Start timelapse recording."""
         if not self._player or not self._player.is_playing():
             self.display_error("Cannot create timelapse: video not playing")
             return
-        
+
         try:
             self.timelapse_encoder = TimelapseEncoder()
             source_fps = 30.0  # Default or detect from player
@@ -199,12 +199,12 @@ class VideoWindow:
             self._show_status("Recording timelapse...")
         except Exception as e:
             self.display_error(f"Failed to start recording: {e}")
-    
+
     def _stop_timelapse_recording(self) -> None:
         """Stop timelapse recording and save."""
         if not self.timelapse_encoder:
             return
-        
+
         try:
             video_path = self.timelapse_encoder.stop_recording()
             self._show_status(f"Timelapse saved: {video_path.name}")
@@ -214,7 +214,7 @@ class VideoWindow:
             self.display_error(f"Failed to save timelapse: {e}")
         finally:
             self.timelapse_encoder = None
-    
+
     def _update_timelapse_button_state(self) -> None:
         """Update button visual state."""
         if self.is_recording_timelapse:
@@ -223,11 +223,11 @@ class VideoWindow:
         else:
             self.timelapse_button.setText("Start Timelapse")
             self.timelapse_button.setStyleSheet("")
-    
+
     def _update_frame(self) -> None:
         """Extended to capture frames for timelapse."""
         # ... existing frame display code ...
-        
+
         # Capture frame if recording
         if self.is_recording_timelapse and self.timelapse_encoder:
             try:
@@ -236,7 +236,7 @@ class VideoWindow:
                 self.timelapse_encoder.capture_frame(frame_array)
             except Exception as e:
                 logger.warning(f"Failed to capture frame: {e}")
-    
+
     def closeEvent(self, event: QCloseEvent | None) -> None:
         """Extended to stop recording on close."""
         if self.is_recording_timelapse:
@@ -337,4 +337,3 @@ class VideoWindow:
 - [Video Window Extension Contract](./contracts/video-window-extension.md)
 - [Data Model](./data-model.md)
 - [Research Findings](./research.md)
-
