@@ -1,0 +1,238 @@
+\documentclass{beamer}
+
+\usepackage{twemojis}
+
+
+
+\title[Spec-Kit Demo]{AI Development With Spec-Kit:\texorpdfstring{\\\small}{ }Turning ``prompt and pray'' into an actual engineering discipline}
+\author{Jeff Richley}
+% \date{\small A live demo featuring pandas, penguins, and at least one otter who tried to sabotage my talk last time.}
+\date{\today}
+
+
+\begin{document}
+
+% ------------------------------------------------
+\begin{frame}
+  \titlepage
+  \vfill
+  \centering
+  {\small A live demo featuring pandas, penguins, and at least one otter who tried to sabotage my talk last time.}
+\end{frame}
+
+% ------------------------------------------------
+\section{The Problem}
+
+\begin{frame}{Why AI Development Feels Chaotic}
+AI projects often go off the rails because:
+\begin{itemize}
+  \item Requirements drift faster than your attention span during a Zoom meeting
+  \item All the ``context'' is scattered across Slack, GitHub, email, sticky notes, and that one brilliant thought you had in the shower
+  \item The AI confidently generates code\ldots{} for a completely different problem
+  \item There is absolutely \emph{not} a repeatable development cycle --- unless ``winging it'' somehow counts
+\end{itemize}
+
+\bigskip
+\textbf{Goal:} Build AI software \emph{without} chaos. (Finally.)
+\end{frame}
+
+
+% ------------------------------------------------
+\section{Introducing Spec-Kit}
+
+\begin{frame}{What Spec-Kit Actually Does}
+Spec-Kit gives you:
+\begin{itemize}
+  \item A workflow that gently forces your AI to act like it's seen a project plan before
+  \item A clean separation between \emph{what you want}, \emph{how you want it}, and \emph{how badly the AI will try to misunderstand it}
+  \item Repeatable, auditable steps --- so future-you can't yell at past-you
+  \item A simple system that works with any AI coding agent (even the ones with ``creative'' tendencies)
+\end{itemize}
+
+\bigskip
+\textbf{Not heavy. Not bureaucratic. Just enough structure to keep things sane.}
+\end{frame}
+
+
+% ------------------------------------------------
+\begin{frame}{The Four Pillars (a.k.a. The Sacred Scrolls)}
+    Spec-Kit consists of:
+    \begin{enumerate}
+      \item \textbf{/specify} --- Define \emph{what} you want and \emph{why}, before the AI goes rogue
+      \item \textbf{/plan} --- Decide \emph{how} you want it built, so the AI doesn’t freestyle jazz your architecture
+      \item \textbf{/tasks} --- Break the project into tiny steps the AI cannot possibly misinterpret
+      \item \textbf{/implement} --- Release the AI to generate code\ldots{} but with \emph{responsible adult supervision}
+    \end{enumerate}
+    \end{frame}
+
+
+% ------------------------------------------------
+\section{Demo App Story}
+
+\begin{frame}{The Demo: ``Pick-a-Zoo''}
+
+\textbf{Previously on\ldots{} Pick-a-Zoo:}\\
+    While planning this talk, the otters staged a small yet passionate union rally.
+    They demanded more screen time, better lighting, and dental.\\
+    Negotiations are\ldots{} ongoing.
+    
+
+\bigskip
+
+\textbf{What we have so far:}
+\begin{itemize}
+  \item \textbf{Live-stream switcher} for real animal cams
+  \item \textbf{Cast:} elephants \twemoji{1f418}, hippos \twemoji{1f99b}, otters \twemoji{1f9a6} (Local 404), penguins \twemoji{1f427}, tigers \twemoji{1f405}
+  \item \textbf{Snapshot button} --- capturing ``evidence'' since day one
+\end{itemize}
+
+\bigskip
+
+\textbf{What we're building today (live):}
+\begin{itemize}
+  \item \textbf{Time-lapse feature} --- otter chaos at 60× speed
+\end{itemize}
+
+\bigskip
+\textbf{Cute animals + structured AI dev = today's adventure.}
+
+\end{frame}
+
+
+    
+% ------------------------------------------------
+\section{Spec-Kit Flow: Live Demo Breakdown}
+
+\begin{frame}{Step 1: /specify --- The Spec Before the Chaos}
+Capturing requirements clearly --- you know, like actual engineering:
+
+\begin{itemize}
+  \item \textbf{What are we building?} \\
+        A real description, not ``something with AI'' scribbled on a napkin.
+  \item \textbf{Why does it matter?} \\
+        If you can't answer this, congratulations: you've discovered scope creep.
+  \item \textbf{What does success look like?} \\
+        Measurable, testable, and the opposite of ``vibes.''
+\end{itemize}
+
+\bigskip
+In real engineering, specifications define behavior, constraints, and acceptance criteria. \\
+\textbf{/specify does the same thing --- just without the 47-page PDF.}
+
+\bigskip
+\textbf{No tech. No code. Just clarity before the AI starts free-styling.}
+\end{frame}
+
+
+% ------------------------------------------------
+\begin{frame}{Step 2: /plan --- The ``Big Brain'' Phase}
+    This is where we pretend we're doing architecture diagrams on purpose:
+    
+    \begin{itemize}
+      \item \textbf{Architecture} \\
+            What the system should look like, not whatever the AI hallucinated at 2 a.m.
+      \item \textbf{Tech stack decisions} \\
+            Picking tools intentionally --- not because they appeared in a YouTube thumbnail.
+      \item \textbf{Data flow} \\
+            How information is \emph{supposed} to move... instead of whatever mysterious path it took last time.
+      \item \textbf{Constraints \& options} \\
+            Performance, deployment, security --- the adult stuff.
+    \end{itemize}
+    
+    \bigskip
+    \textbf{/plan is the AI's blueprint. Without it, the AI builds you a treehouse when you asked for a garage.}
+    \end{frame}
+    
+
+% ------------------------------------------------
+\begin{frame}{Step 3: /tasks --- Tiny Steps, Huge Payoff}
+    Tasks exist to prevent chaos and emotional damage:
+    
+    \begin{itemize}
+      \item \textbf{Atomic, buildable steps} \\
+            If a task takes more than one breath to read, break it up.
+      \item \textbf{Dependency order} \\
+            Because ``surprise prerequisites'' are how projects die.
+      \item \textbf{Status tracking} \\
+            (Todo / In Progress / Done / ``Why did Past-Me do this?'')
+      \item \textbf{A roadmap the AI can actually follow} \\
+            Think turn-by-turn GPS\ldots{} not ``good luck, buddy.''
+    \end{itemize}
+    
+    \bigskip
+    \textbf{If a task is unclear, the AI will \emph{absolutely} produce unclear code — and it will do so with confidence.}
+    \end{frame}
+    
+
+% ------------------------------------------------
+\begin{frame}{Step 4: /implement --- Where We Let the AI Cook}
+    Where the ``magic'' happens\ldots{} 
+    (and by magic, we mean carefully supervised automation):
+    
+    \begin{itemize}
+      \item \textbf{Trigger tasks one at a time} \\
+            Giving the AI \emph{all} the tasks at once is how horror movies start.
+      \item \textbf{AI generates code guided by spec + plan} \\
+            Finally using the instructions we so lovingly crafted.
+      \item \textbf{Inspect results} \\
+            Trust is great\ldots{} but verification prevents therapy bills.
+      \item \textbf{Iterate cleanly} \\
+            Fix, refine, repeat --- not ``burn it down and start over.''
+    \end{itemize}
+    
+    \bigskip
+    \textbf{A simple loop: Specify $\rightarrow$ Plan $\rightarrow$ Tasks $\rightarrow$ Implement.}\\
+    Rinse. Repeat. Minimal screaming.
+    \end{frame}
+    
+
+% ------------------------------------------------
+\section{Conclusion}
+
+\begin{frame}{The Takeaway}
+Spec-Kit transforms AI development by:
+
+\begin{itemize}
+  \item \textbf{Providing clarity and structure} \\
+        Because ``guess what I meant'' is not a development strategy.
+  \item \textbf{Enabling repeatable workflows} \\
+        You know\ldots{} like real engineering.
+  \item \textbf{Reducing rework and hallucinated code} \\
+        The AI will still hallucinate --- just less, and more politely.
+  \item \textbf{Making AI coding assistants actually useful} \\
+        Instead of creative writers accidentally doing software engineering.
+\end{itemize}
+
+\bigskip
+\textbf{It's time to retire ``prompt and pray.'' We're doing actual engineering now.}
+\end{frame}
+
+
+% ------------------------------------------------
+\begin{frame}
+    \centering
+  
+    {\Huge Thank you!}
+  
+    \bigskip
+  
+    {\large You've been an amazing audience}\\
+    
+    {\small --- significantly less chaotic than my AI agents.}
+  
+    \vfill
+  
+    {\Large Questions?}
+  
+    \medskip
+  
+    {\small (Preferably about Spec-Kit\ldots{} but I am also prepared for otter-related inquiries.)}
+  
+    \bigskip
+  
+    {\tiny If your question is ``Why did the AI do that?'', the answer is: because you trusted it.}
+  \end{frame}
+  
+
+% ------------------------------------------------
+\end{document}
