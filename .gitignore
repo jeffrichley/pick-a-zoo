@@ -148,6 +148,8 @@ snapshots/
 *.yaml.bak
 *.yml.bak
 .pickazoo/
+.cd4py_tokens/
+duplicates.jsonl.gz
 
 # OS files
 Thumbs.db

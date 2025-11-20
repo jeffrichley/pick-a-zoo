@@ -5,6 +5,8 @@ for playback logic. Video windows run in separate processes launched from the TU
 to avoid conflicts with Textual's terminal control.
 """
 
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 from loguru import logger
@@ -22,6 +24,9 @@ from pick_a_zoo.core.video_player import (
 if TYPE_CHECKING:
     from PyQt6.QtCore import QTimer
     from PyQt6.QtGui import QCloseEvent, QResizeEvent
+    from PyQt6.QtWidgets import QVBoxLayout
+
+    from pick_a_zoo.core.timelapse_encoder import TimelapseEncoder
 
 
 class VideoWindow:
@@ -94,13 +99,20 @@ class VideoWindow:
             # Initialize video player
             self._player: VideoPlayer | None = None
 
+            # Initialize timelapse encoder
+            self._timelapse_encoder: TimelapseEncoder | None = None
+            self._is_recording_timelapse = False
+
+            # Setup timelapse button
+            self._setup_timelapse_button(layout)
+
             # Resize debouncing
             self._resize_timer: QTimer | None = None
 
             # Override window event handlers to forward to our methods
             original_close = self._window.closeEvent
 
-            def wrapped_close(event: "QCloseEvent | None") -> None:
+            def wrapped_close(event: QCloseEvent | None) -> None:
                 self.closeEvent(event)
                 # Call original handler if event wasn't accepted
                 if event and not event.isAccepted():
@@ -108,7 +120,7 @@ class VideoWindow:
 
             original_resize = self._window.resizeEvent
 
-            def wrapped_resize(event: "QResizeEvent | None") -> None:
+            def wrapped_resize(event: QResizeEvent | None) -> None:
                 self.resizeEvent(event)
                 # Call original handler
                 original_resize(event)
@@ -420,6 +432,33 @@ class VideoWindow:
                         self.error_label.hide()
                     self.video_label.show()
 
+                    # Capture frame for timelapse if recording
+                    if self._is_recording_timelapse and self._timelapse_encoder:
+                        try:
+                            import numpy as np
+
+                            # Get the original frame data from VideoFrame
+                            if hasattr(frame, "pixels"):
+                                img = frame.pixels
+                                frame_array = None
+
+                                # Try to extract numpy array from ffpyplayer Image object
+                                if hasattr(img, "get_pixel_array"):
+                                    frame_array = img.get_pixel_array()
+                                elif isinstance(img, np.ndarray):
+                                    frame_array = img
+
+                                # If we got a valid array, capture it
+                                if frame_array is not None and isinstance(frame_array, np.ndarray):
+                                    if frame_array.ndim == 3 and frame_array.shape[2] == 3:
+                                        self._timelapse_encoder.capture_frame(frame_array)
+                                    elif frame_array.ndim == 2:
+                                        # Grayscale, convert to RGB
+                                        frame_array = np.stack([frame_array] * 3, axis=2)
+                                        self._timelapse_encoder.capture_frame(frame_array)
+                        except Exception as e:
+                            logger.warning(f"Error capturing frame for timelapse: {e}")
+
                     # Log first successful frame
                     if not hasattr(self, "_first_frame_shown"):
                         logger.info("First frame displayed successfully")
@@ -436,7 +475,7 @@ class VideoWindow:
         except Exception as e:
             logger.warning(f"Error updating frame: {e}", exc_info=True)
 
-    def closeEvent(self, event: "QCloseEvent | None") -> None:  # noqa: N802
+    def closeEvent(self, event: QCloseEvent | None) -> None:  # noqa: N802
         """Handle window close event.
 
         Args:
@@ -464,6 +503,13 @@ class VideoWindow:
         except Exception as e:
             logger.warning(f"Failed to save window dimensions: {e}", exc_info=True)
 
+        # Stop timelapse recording if active
+        if self._is_recording_timelapse and self._timelapse_encoder:
+            try:
+                self._stop_timelapse_recording()
+            except Exception as e:
+                logger.warning(f"Error stopping timelapse recording on close: {e}")
+
         # Stop video player
         if self._player:
             self._player.stop()
@@ -476,7 +522,7 @@ class VideoWindow:
         if event:
             event.accept()
 
-    def resizeEvent(self, event: "QResizeEvent | None") -> None:  # noqa: N802
+    def resizeEvent(self, event: QResizeEvent | None) -> None:  # noqa: N802
         """Handle window resize event.
 
         Args:
@@ -539,3 +585,164 @@ class VideoWindow:
         )
         self.error_label.show()
         self.video_label.hide()
+
+    def _setup_timelapse_button(self, layout: QVBoxLayout) -> None:
+        """Setup timelapse button in the video window.
+
+        Args:
+            layout: QVBoxLayout to add button to
+
+        Behavior:
+            - Creates QPushButton for timelapse control
+            - Adds button to layout
+            - Connects button click handler
+            - Sets initial button state
+
+        Side Effects:
+            - Button created and added to window
+            - Button click handler connected
+        """
+        from PyQt6.QtWidgets import QPushButton
+
+        self.timelapse_button = QPushButton("Start Timelapse")
+        self.timelapse_button.setStyleSheet(
+            "background-color: #4CAF50; color: white; font-size: 14px; "
+            "padding: 10px; border: none; border-radius: 5px;"
+        )
+        self.timelapse_button.clicked.connect(self._on_timelapse_button_clicked)
+        layout.addWidget(self.timelapse_button)
+        logger.debug("Timelapse button created")
+
+    def _on_timelapse_button_clicked(self) -> None:
+        """Handle timelapse button click event.
+
+        Behavior:
+            - If not recording: starts timelapse recording
+            - If recording: stops timelapse recording and saves video
+            - Updates button state for visual feedback
+
+        Side Effects:
+            - Recording state toggled
+            - Button text and style updated
+            - Logs button interaction
+        """
+        if self._is_recording_timelapse:
+            logger.info("Timelapse button clicked: stopping recording")
+            self._stop_timelapse_recording()
+        else:
+            logger.info("Timelapse button clicked: starting recording")
+            self._start_timelapse_recording()
+
+    def _start_timelapse_recording(self) -> None:
+        """Start timelapse recording.
+
+        Behavior:
+            - Validates that video is playing
+            - Creates TimelapseEncoder instance
+            - Starts recording with feed name and source fps
+            - Updates button state
+
+        Raises:
+            RuntimeError: If video is not playing
+            RecordingInProgressError: If recording already active
+
+        Side Effects:
+            - Recording started
+            - Button state updated
+            - Logs recording start
+        """
+        if not self._player or not self._player.is_playing():
+            self.display_error("Video must be playing to start timelapse recording")
+            logger.warning("Attempted to start timelapse recording when video not playing")
+            return
+
+        if self._is_recording_timelapse:
+            logger.warning("Attempted to start recording when already recording")
+            return
+
+        try:
+            from pick_a_zoo.core.timelapse_encoder import TimelapseEncoder
+
+            # Create encoder
+            self._timelapse_encoder = TimelapseEncoder()
+
+            # Detect source fps (default to 30.0 if unknown)
+            source_fps = 30.0  # TODO: Get actual fps from VideoPlayer if available
+
+            # Start recording
+            self._timelapse_encoder.start_recording(self.feed_name, source_fps=source_fps)
+            self._is_recording_timelapse = True
+
+            # Update button state
+            self._update_timelapse_button_state()
+
+            logger.info(f"Started timelapse recording for feed: {self.feed_name}")
+        except Exception as e:
+            logger.error(f"Failed to start timelapse recording: {e}")
+            self.display_error(f"Failed to start timelapse: {e}")
+            self._timelapse_encoder = None
+
+    def _stop_timelapse_recording(self) -> None:
+        """Stop timelapse recording and save video.
+
+        Behavior:
+            - Stops recording
+            - Encodes and saves video file
+            - Updates button state
+            - Cleans up encoder
+
+        Side Effects:
+            - Video file saved
+            - Recording stopped
+            - Button state updated
+            - Logs recording stop
+        """
+        if not self._is_recording_timelapse or not self._timelapse_encoder:
+            logger.warning("Attempted to stop recording when not recording")
+            return
+
+        try:
+            video_path = self._timelapse_encoder.stop_recording()
+            self._is_recording_timelapse = False
+            self._timelapse_encoder = None
+
+            # Update button state
+            self._update_timelapse_button_state()
+
+            logger.info(f"Timelapse saved: {video_path}")
+            # Show success message briefly
+            self._show_status(f"Timelapse saved: {video_path.name}")
+        except Exception as e:
+            logger.error(f"Failed to stop timelapse recording: {e}")
+            self.display_error(f"Failed to save timelapse: {e}")
+            self._is_recording_timelapse = False
+            self._timelapse_encoder = None
+            self._update_timelapse_button_state()
+
+    def _update_timelapse_button_state(self) -> None:
+        """Update timelapse button visual state.
+
+        Behavior:
+            - Updates button text based on recording state
+            - Updates button style (color) for visual feedback
+            - Enabled/disabled state based on video playback
+
+        Side Effects:
+            - Button appearance updated
+        """
+        if self._is_recording_timelapse:
+            self.timelapse_button.setText("Stop Timelapse")
+            self.timelapse_button.setStyleSheet(
+                "background-color: #f44336; color: white; font-size: 14px; "
+                "padding: 10px; border: none; border-radius: 5px;"
+            )
+        else:
+            self.timelapse_button.setText("Start Timelapse")
+            self.timelapse_button.setStyleSheet(
+                "background-color: #4CAF50; color: white; font-size: 14px; "
+                "padding: 10px; border: none; border-radius: 5px;"
+            )
+
+        # Enable/disable based on video playback
+        is_playing = self._player is not None and self._player.is_playing()
+        self.timelapse_button.setEnabled(is_playing or self._is_recording_timelapse)
