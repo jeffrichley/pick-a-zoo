@@ -152,7 +152,7 @@ class StreamCandidate(BaseModel):
 
     url: str = Field(description="Extracted stream URL")
     source_type: str = Field(
-        description=("How it was found (e.g., 'video_tag', 'source_tag', " "'m3u8_link', 'iframe')")
+        description=("How it was found (e.g., 'video_tag', 'source_tag', 'm3u8_link', 'iframe')")
     )
 
 
@@ -457,7 +457,7 @@ def validate_url_accessibility(url: str, timeout: float = 15.0) -> URLValidation
                     is_accessible=False,
                     status_code=response.status_code,
                     error_message=(
-                        f"URL exceeded maximum redirect limit (5): " f"{redirect_count} redirects"
+                        f"URL exceeded maximum redirect limit (5): {redirect_count} redirects"
                     ),
                     content_type=response.headers.get("Content-Type"),
                 )

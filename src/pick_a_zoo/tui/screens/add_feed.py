@@ -185,7 +185,7 @@ class AddFeedScreen(Screen):
             logger.error(f"Unexpected error: {e}", exc_info=True)
             self.current_state = "error"
             self.error_message = (
-                f"An unexpected error occurred: {e}. " "Please try again or press 'q' to cancel."
+                f"An unexpected error occurred: {e}. Please try again or press 'q' to cancel."
             )
             self._update_display()
 
@@ -253,8 +253,7 @@ class AddFeedScreen(Screen):
                         if len(self.stream_candidates) == 1:
                             stream_url = self.stream_candidates[0].url
                             logger.info(
-                                f"Single stream found with Playwright, "
-                                f"auto-selecting: {stream_url}"
+                                f"Single stream found with Playwright, auto-selecting: {stream_url}"
                             )
                             self._save_direct_stream_feed(stream_url)
                             return
@@ -300,7 +299,7 @@ class AddFeedScreen(Screen):
                         if len(self.stream_candidates) == 1:
                             stream_url = self.stream_candidates[0].url
                             logger.info(
-                                f"Single stream found despite 403, " f"auto-selecting: {stream_url}"
+                                f"Single stream found despite 403, auto-selecting: {stream_url}"
                             )
                             self._save_direct_stream_feed(stream_url)
                             return
@@ -362,7 +361,7 @@ class AddFeedScreen(Screen):
             logger.error(f"Unexpected error handling HTML page: {e}", exc_info=True)
             self.current_state = "error"
             self.error_message = (
-                f"An unexpected error occurred: {e}. " "Please try again or press 'q' to cancel."
+                f"An unexpected error occurred: {e}. Please try again or press 'q' to cancel."
             )
             self._update_display()
 
@@ -392,9 +391,7 @@ class AddFeedScreen(Screen):
         except Exception as e:
             logger.error(f"Error saving feed: {e}", exc_info=True)
             self.current_state = "error"
-            self.error_message = (
-                f"Error saving feed: {e}. " "Please try again or press 'q' to cancel."
-            )
+            self.error_message = f"Error saving feed: {e}. Please try again or press 'q' to cancel."
             self._update_display()
 
     @on(ListView.Selected, "#stream-list")
