@@ -469,8 +469,7 @@ class VideoWindow:
                 img_type = type(img)
                 attrs = dir(img)[:10] if hasattr(img, "__dict__") else "N/A"
                 logger.warning(
-                    f"Frame pixels object has no 'shape' attribute: {img_type}. "
-                    f"Attributes: {attrs}"
+                    f"Frame pixels object has no 'shape' attribute: {img_type}. Attributes: {attrs}"
                 )
         except Exception as e:
             logger.warning(f"Error updating frame: {e}", exc_info=True)
